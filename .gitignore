@@ -2,3 +2,4 @@
 .project
 *.love
 res/*
+*.swp
