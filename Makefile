@@ -4,7 +4,7 @@ RM=rm -rf
 GAME=game.love
 
 game.love: *.lua
-	$(ZIP) $(GAME) *.lua res
+	$(ZIP) $(GAME) *.lua
 
 all: game.love
 
