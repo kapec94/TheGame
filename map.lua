@@ -51,6 +51,6 @@ end
 function Tile:draw()
 	love.graphics.setColor(self.Color)
 	love.graphics.rectangle('fill',
-		self.x, self.y,
+		self.pos.x, self.pos.y,
 		self.Width, self.Height)
 end

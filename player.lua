@@ -6,45 +6,35 @@ Player.Color = Colors.cornflowerBlue
 
 function Player:init(x, y)
 	self.super:init(x, y)
-	
-	self.vx = 0
-	self.vy = 0
+	self.v = vec(0, 0)
 end
 
 function Player:onDraw()
 	love.graphics.setColor(self.Color)
-	love.graphics.rectangle("fill", self.x, self.y,
+	love.graphics.rectangle("fill", self.pos.x, self.pos.y,
 		self.Width, self.Height)
 end
 
 function Player:onKeyPress(key)
-	if key == 'left' then	
-		self.vx = -100
+	if key == 'left' then
+		self.v.x = -100
 	end
 	if key == 'right' then
-		self.vx = 100
-	end
-	if key == 'down' then
-		self.vy = 100
-	end
-	if key == 'up' then 
-		self.vy = -100
+		self.v.x = 100
 	end
 end
 
 function Player:onKeyRelease(key)
 	if key == 'left' or key == 'right' then
-		self.vx = 0
-	elseif key == 'up' or key == 'down' then
-		self.vy = 0
+		self.v.x = 0
 	end
 end
 
-function Player:move(dx, dy)
-	self.x = self.x + dx
-	self.y = self.y + dy
+function Player:move(dr)
+	self.pos = self.pos + dr
 end
 
 function Player:onUpdate(dt)
-	self:move(self.vx * dt, self.vy * dt)
+	self:move(self.v * dt)
 end
+

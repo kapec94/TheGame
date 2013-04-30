@@ -1,5 +1,7 @@
 -- This is the Game.
 
+vec = require "hump.vector"
+
 require "util"
 require "settings"
 require "colors"
