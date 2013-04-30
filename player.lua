@@ -9,10 +9,6 @@ function Player:init(x, y)
 	
 	self.vx = 0
 	self.vy = 0
-
-	Game:addActive(self)
-	Game:addInteractive(self)
-	Game:addDrawable(self)
 end
 
 function Player:onDraw()

@@ -1,5 +1,6 @@
 -- This is the Game.
 
+require "util"
 require "settings"
 require "colors"
 
@@ -16,9 +17,15 @@ function love.load()
 	me = Player()
 	map = Map()
 
-	for y = -1, map.Height do
-		for x = -1, map.Width do
-			map:setTile(x, y, Tile:new(y > map.Height / 2))
+	Game:addActive(me)
+	Game:addInteractive(me)
+	Game:addDrawable(me)
+
+	Game:addDrawable(map)
+
+	for y = 0, map.Height - 1 do
+		for x = 0, map.Width - 1 do
+			map:setTile(x, y, y > map.Height / 2)
 		end
 	end
 end
