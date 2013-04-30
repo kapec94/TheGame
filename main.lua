@@ -51,8 +51,8 @@ function love.update(dt)
 end
 
 function love.draw()
-	for _,drawable in ipairs(Game.drawables) do
-		drawable:onDraw()
+	for _, d in ipairs(Game.drawables) do
+		util.imap(function (v) v:onDraw() end, d)
 	end
 end
 

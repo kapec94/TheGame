@@ -1,7 +1,12 @@
 Game = {
-	addDrawable = function (self, obj)
+	addDrawable = function (self, obj, index)
+		index = index or 5
+
+		assert (obj)	
 		assert (obj.onDraw)
-		table.insert(self.drawables, obj)
+		assert (index >= 1 and index <= 10)
+		
+		table.insert(self.drawables[index], obj)
 	end,
 	
 	addActive = function (self, obj)
@@ -34,14 +39,23 @@ Game = {
 
 	keypressHooks = {},
 	keyreleaseHooks = {},
-	drawables = {},
+	drawables = util.rep({}, 10),
 	actives = {},
+
+	__statusText = nil,
 
 	onKeyPress = function (self, key)
 		if key == 'escape' then
 			love.event.quit()
 		end
+	end,
+	onDraw = function (self)
+		love.graphics.setColor(Colors.orange)
+		love.graphics.print(string.format("FPS: %s\np.v = %s;\np.pos = {%s, %s}", 
+			love.timer.getFPS(), me.v, me.pos.x, me.pos.y), 
+			10, 10)
 	end
 }
 
 Game:addInteractive(Game)
+Game:addDrawable(Game, 10)
