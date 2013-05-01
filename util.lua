@@ -1,16 +1,25 @@
 util = {}
 
-util.imap = function (fn, t)
-	for _, v in ipairs(t) do
-		fn(v)
+local function iterate(fn, it)
+	assert (fn)
+	if it == nil then return end
+
+	if type(it) == 'table' then
+		for _,v in ipairs(it) do fn(v) end
+	else
+		for v in it do fn(v) end
 	end
+end
+
+util.mmap = function (fn, t)
+	iterate(fn, t)
 end
 
 util.select = function (fn, t)
 	local ret = {}
-	for _, v in ipairs(t) do
+	iterate(function (v)
 		if fn(v) then table.insert(ret, v) end
-	end
+	end, t)
 	return ret
 end
 

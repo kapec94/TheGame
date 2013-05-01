@@ -28,7 +28,7 @@ function Map:sample(x, y)
 end
 
 function Map:onDraw()
-	util.imap(function (tile)
+	util.mmap(function (tile)
 		if tile:isFilled() then tile:draw() end
 	end, self.tiles)
 end

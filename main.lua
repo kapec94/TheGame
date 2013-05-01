@@ -52,7 +52,7 @@ end
 
 function love.draw()
 	for _, d in ipairs(Game.drawables) do
-		util.imap(function (v) v:onDraw() end, d)
+		util.mmap(function (v) v:onDraw() end, d)
 	end
 end
 
