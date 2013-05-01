@@ -1,7 +1,8 @@
 Config = {
 	Screen = {
 		Width = 600,
-		Height = 360 
+		Height = 400 
 	},
-	Gravity = 10000
+	Gravity = vec(0, 1200)
 }
+

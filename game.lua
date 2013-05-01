@@ -1,4 +1,11 @@
 Game = {
+	setMap = function (self, map)
+		self.__activeMap = map
+	end,
+	getMap = function (self)
+		return self.__activeMap
+	end,
+
 	addDrawable = function (self, obj, index)
 		index = index or 5
 
@@ -24,6 +31,27 @@ Game = {
 		end
 	end,
 
+	addCollidable = function (self, obj, active)
+		active = active or true
+		
+		assert (obj)
+		assert (obj.getShape)
+		
+		local shape = obj:getShape()
+		self.collider:addShape(shape)
+		if active == false then 
+			self.collider:setPassive(shape)
+		end
+		self.shapes[shape] = obj
+
+		if obj.onCollision then
+			self.collisionHooks[shape] = obj
+		end
+		if obj.onCollisionEnd then
+			self.collisionEndHooks[shapes] = obj
+		end
+	end,
+
 	removeDrawable = function (self, obj)
 		table.remove(self.drawables, obj)
 	end,
@@ -37,12 +65,25 @@ Game = {
 		table.remove(self.keyreleaseHooks, obj)
 	end,
 
+	removeCollidable = function (self, obj)
+		self.collisionHooks[obj] = nil
+		self.collisionEndHooks[obj] = nil
+		self.activeShapes[obj] = nil
+	end,
+
 	keypressHooks = {},
 	keyreleaseHooks = {},
 	drawables = util.rep({}, 10),
 	actives = {},
 
+	shapes = {},
+	collisionHooks = {},
+	collisionEndHooks = {},
+
+	collider = hc(Tile.static.Width, function(...) on_collision(...) end, function (...) on_collision_end(...) end),
+
 	__statusText = nil,
+	__activeMap = nil,
 
 	onKeyPress = function (self, key)
 		if key == 'escape' then

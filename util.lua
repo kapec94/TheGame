@@ -66,3 +66,9 @@ function table.deepcopy(o, seen)
 	end
 	return no
 end
+
+function shapes.newRectangleShape(x, y, w, h)
+	x = x - w/2
+	y = y - h/2
+	return shapes.newPolygonShape(x,y, x+w,y, x+w,y+h, x,y+h)
+end
