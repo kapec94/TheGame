@@ -1,13 +1,15 @@
-GameObject = newclass("GameObject")
+local GameObject = class {
+	init = function (self, x, y)
+		self.pos = vec(x or 0, y or 0)
+	end;
+	
+	getPos = function (self)
+		return self.pos
+	end;
 
-function GameObject:init(x, y)
-	self.pos = vec(x or 0, y or 0)
-end
+	getXY = function (self)
+		return self.pos.x, self.pos.y
+	end;
+}
 
-function GameObject:getPos()
-	return self.pos
-end
-
-function GameObject:getXY()
-	return self.pos.x, self.pos.y
-end
+return GameObject

@@ -1,4 +1,4 @@
-util = {}
+local util = {}
 
 local function iterate(fn, it)
 	assert (fn)
@@ -72,3 +72,5 @@ function shapes.newRectangleShape(x, y, w, h)
 	y = y - h/2
 	return shapes.newPolygonShape(x,y, x+w,y, x+w,y+h, x,y+h)
 end
+
+return util
