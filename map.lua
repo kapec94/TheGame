@@ -9,8 +9,8 @@ function Map:init()
 		for y = 0, self.Height - 1 do
 			local i = y * self.Width + x
 			self.tiles[i] = Tile:new(false, 
-							x * Tile.static.Width, 
-							y * Tile.static.Height)
+							x * Tile.static.Width + Tile.static.Width / 2, 
+							y * Tile.static.Height + Tile.static.Height / 2)
 		end
 	end
 end
@@ -51,6 +51,6 @@ end
 function Tile:draw()
 	love.graphics.setColor(self.Color)
 	love.graphics.rectangle('fill',
-		self.pos.x, self.pos.y,
+		self.pos.x - self.Width / 2, self.pos.y - self.Height / 2,
 		self.Width, self.Height)
 end

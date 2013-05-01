@@ -11,7 +11,7 @@ end
 
 function Player:onDraw()
 	love.graphics.setColor(self.Color)
-	love.graphics.rectangle("fill", self.pos.x, self.pos.y,
+	love.graphics.rectangle("fill", self.pos.x - self.Width / 2, self.pos.y - self.Height / 2,
 		self.Width, self.Height)
 end
 

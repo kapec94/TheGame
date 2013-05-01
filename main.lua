@@ -16,7 +16,7 @@ require "player"
 function love.load()
 	love.graphics.setMode(Config.Screen.Width, Config.Screen.Height)
 
-	me = Player()
+	me = Player(50, 50)
 	map = Map()
 
 	Game:addActive(me)
