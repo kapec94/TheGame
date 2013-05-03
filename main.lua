@@ -4,13 +4,16 @@ vec 	= require "hump.vector"
 class 	= require "hump.class"
 hc 		= require "HardonCollider"
 shapes 	= require "HardonCollider.shapes"
-util 	= require "util"
 
 Config		= require "settings"
 Colors		= require "colors"
 GameObject 	= require "gameobject"
 Map, Tile	= require "map" ()
 Player		= require "player"
+
+shapes.newRectangleShape = function (x, y, w, h)
+	return shapes.newPolygonShape(x,y, x+w,y, x+w,y+h, x,y+h)
+end
 
 Game = {
 	setMap = function (self, map)
@@ -88,7 +91,7 @@ Game = {
 
 	keypressHooks 		= {};
 	keyreleaseHooks		= {};
-	drawables 			= util.rep({}, 10);
+	drawables 			= {};
 	actives 			= {};
 	shapes 				= {};
 	collisionHooks 		= {};
@@ -115,6 +118,10 @@ Game = {
 
 function love.load()
 	love.graphics.setMode(Config.Screen.Width, Config.Screen.Height)
+
+	for i = 1, 10 do
+		table.insert(Game.drawables, {})
+	end
 
 	Game:addInteractive(Game)
 	Game:addDrawable(Game, 10)
@@ -146,7 +153,9 @@ function love.load()
 			map:setTile(x, y, map_data[y * map.Width + x + 1] == 1)
 		end
 	end
-	util.mmap (function (t) Game:addCollidable(t, false) end, map:getFilledTiles())
+	for _, t in ipairs(map:getFilledTiles()) do
+		Game:addCollidable(t, false)
+	end
 end
 
 function love.keypressed(key, unicode)
@@ -170,7 +179,9 @@ end
 
 function love.draw()
 	for _, d in ipairs(Game.drawables) do
-		util.mmap(function (v) v:onDraw() end, d)
+		for _, v in ipairs(d) do
+			v:onDraw()
+		end
 	end
 end
 

@@ -20,7 +20,11 @@ local Map = class {
 	end;
 
 	getFilledTiles = function (self)
-		return util.select (function (t) return t:isFilled() end, self.tiles)
+		local filled = {}
+		for _,t in ipairs(self.tiles) do
+			if t:isFilled() then table.insert(filled, t) end
+		end
+		return filled
 	end;
 
 	setTile = function (self, x, y, fill)
@@ -32,7 +36,9 @@ local Map = class {
 	end;
 
 	onDraw = function (self)
-		util.mmap(function (tile) tile:draw() end, self:getFilledTiles())
+		for _, t in ipairs(self:getFilledTiles()) do
+			t:draw()
+		end
 	end;
 }
 
