@@ -8,10 +8,13 @@ shapes 	= require "HardonCollider.shapes"
 Config		= require "settings"
 Colors		= require "colors"
 GameObject 	= require "gameobject"
-Map, Tile	= require "map" ()
+Map			= require "map"
+Tile		= Map.Tile
 Player		= require "player"
 
 shapes.newRectangleShape = function (x, y, w, h)
+	x = x - w / 2
+	y = y - h / 2
 	return shapes.newPolygonShape(x,y, x+w,y, x+w,y+h, x,y+h)
 end
 
@@ -110,8 +113,8 @@ Game = {
 
 	onDraw = function (self)
 		love.graphics.setColor(Colors.orange)
-		love.graphics.print(string.format("FPS: %s\np.v = %s;\np.pos = {%s, %s}", 
-			love.timer.getFPS(), me.v, me.pos.x, me.pos.y), 
+		love.graphics.print(string.format("FPS: %s\np.v = {%s, %s};\np.pos = {%s, %s}", 
+			love.timer.getFPS(), me.v.x, me.v.y, me.pos.x, me.pos.y), 
 			10, 10)
 	end;
 }
@@ -126,34 +129,21 @@ function love.load()
 	Game:addInteractive(Game)
 	Game:addDrawable(Game, 10)
 
-	Game.collider = hc(Tile.Width, on_collision, on_collision_end);
-
 	map = Map("test")
 	Game:setMap(map)
 	Game:addDrawable(map)
 	
-	me = Player(50, 50)
+	Game.collider = hc(Tile.Width, on_collision, on_collision_end);
+
+	local spawnEvent = map.events['spawn']
+
+	me = Player(spawnEvent.x, spawnEvent.y)
 	Game:addActive(me)
 	Game:addInteractive(me)
 	Game:addDrawable(me)
 	Game:addCollidable(me, true)
 
-	local map_data = {
-		0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
-		1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
-		1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0,
-		1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-	}
-	for y = 0, map.Height - 1 do
-		for x = 0, map.Width - 1 do
-			map:setTile(x, y, map_data[y * map.Width + x + 1] == 1)
-		end
-	end
-	for _, t in ipairs(map:getFilledTiles()) do
+	for _, t in ipairs(map:getTiles()) do
 		Game:addCollidable(t, false)
 	end
 end
@@ -182,6 +172,10 @@ function love.draw()
 		for _, v in ipairs(d) do
 			v:onDraw()
 		end
+	end
+	love.graphics.setColor(Colors.orange)
+	for s, o in pairs(Game.shapes) do
+		s:draw('line')
 	end
 end
 

@@ -1,8 +1,8 @@
 local Player = class {
 	__includes = GameObject;
 
-	Width = 30;
-	Height = 30;
+	Width = 20;
+	Height = 20;
 	Color = Colors.cornflowerBlue;
 
 	init = function (self, x, y)
@@ -53,12 +53,22 @@ local Player = class {
 	onCollision = function (self, dt, shape, dx, dy)
 		self:move(vec(dx, dy))
 
-		-- I don't know, why. Don't ask me.                                                                              ?
-		if shape:intersectsRay(self.pos.x - self.Width / 2 + 1, self.pos.y + self.Height / 2, self.Width, self.Height * 1.6) then
-			self.v.y = 0
+		local pos = {
+			self.pos.x,
+			self.pos.x - self.Width / 2 + 1,
+			self.pos.x + self.Width / 2 - 1
+		}
+
+		for _, x in ipairs(pos) do
+			if shape:intersectsRay(x, self.pos.y, 0, self.Height) == true then
+				self.v.y = 0
+			end
 		end
-		if shape:intersectsRay(self.pos.x, self.pos.y, 0, -self.Height) then
-			self.v.y = 0
+
+		for _, x in ipairs(pos) do
+			if shape:intersectsRay(x, self.pos.y, 0, -self.Height) == true then
+				self.v.y = 0
+			end
 		end
 	end;
 }

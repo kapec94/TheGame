@@ -1,9 +1,10 @@
 local Config = {
 	Screen = {
-		Width = 600,
-		Height = 400 
+		Width = 480,
+		Height = 360 
 	},
-	Gravity = vec(0, 1200)
+	Gravity = vec(0, 1200),
+	MapPath = "res/maps/"
 }
 
 return Config

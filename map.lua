@@ -1,73 +1,50 @@
-local Map = class {
-	Width = 12;
-	Height = 9;
+local atl = require "atl"
+atl.Loader.path = Config.MapPath or './'
 
+
+local Map = class {
+	Tile = class {
+		__includes = GameObject;
+
+		init = function (self, x, y)
+			GameObject.init(self, x, y)
+		end;
+
+		getShape = function (self)
+			return shapes.newRectangleShape(
+				self.pos.x, self.pos.y, self.Width, self.Height)
+		end;
+	};
+	
 	init = function (self, name)
 		self.name = name
+		self.map = atl.Loader.load(name .. ".tmx")
+		self.width = self.map.width
+		self.height = self.map.height
+
+		Tile.Width = self.map.tileWidth
+		Tile.Height = self.map.tileHeight
+
 		self.tiles = {}
-		for x = 0, self.Width - 1 do
-			for y = 0, self.Height - 1 do
-				local i = y * self.Width + x
-				self.tiles[i] = Tile(false, 
-					x * Tile.Width + Tile.Width / 2, 
-					y * Tile.Height + Tile.Height / 2)
-			end
+		for x, y, tile in self.map('tiles'):iterate() do
+			local t = Tile((x + 0.5) * Tile.Width, (y + 0.5) * Tile.Height)
+			table.insert (self.tiles, t)
+		end
+
+		self.events = {}
+		for i, o in ipairs(self.map('events').objects) do
+			self.events[o.name] = o
 		end
 	end;
 
-	getTile = function (self, x, y)
-		return self.tiles[y * self.Width + x]
-	end;
-
-	getFilledTiles = function (self)
-		local filled = {}
-		for _,t in ipairs(self.tiles) do
-			if t:isFilled() then table.insert(filled, t) end
-		end
-		return filled
-	end;
-
-	setTile = function (self, x, y, fill)
-		self.tiles[y * self.Width + x].filled = fill
-	end;
-
-	sample = function (self, x, y)
-		return self:getTile(math.floor(x / Tile.static.Width), math.floor(y / Tile.static.Height))
+	getTiles = function (self)
+		return self.tiles
 	end;
 
 	onDraw = function (self)
-		for _, t in ipairs(self:getFilledTiles()) do
-			t:draw()
-		end
+		love.graphics.setColor(Colors.white)
+		self.map:draw()
 	end;
 }
 
-local Tile = class {
-	__includes = GameObject;
-
-	Color 	= Colors.white;
-	Width 	= Config.Screen.Width / Map.Width;
-	Height 	= Config.Screen.Height / Map.Height;
-
-	init = function (self, fill, x, y)
-		GameObject.init(self, x, y)
-		self.filled = fill
-	end;
-
-	getShape = function (self)
-		return shapes.newRectangleShape(self.pos.x, self.pos.y, self.Width, self.Height)
-	end;
-
-	isFilled = function (self)
-		return self.filled
-	end;
-
-	draw = function (self)
-		love.graphics.setColor(self.Color)
-		love.graphics.rectangle('fill',
-			self.pos.x - self.Width / 2, self.pos.y - self.Height / 2,
-			self.Width, self.Height)
-	end;
-}
-
-return function () return  Map, Tile end
+return Map
