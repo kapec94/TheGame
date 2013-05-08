@@ -19,14 +19,6 @@ shapes.newRectangleShape = function (x, y, w, h)
 end
 
 Game = {
-	setMap = function (self, map)
-		self.activeMap = map
-	end;
-
-	getMap = function (self)
-		return self.activeMap
-	end;
-
 	addDrawable = function (self, obj, index)
 		index = index or 5
 
@@ -100,10 +92,7 @@ Game = {
 	collisionHooks 		= {};
 	collisionEndHooks 	= {};
 
-	collider 			= nil; 
-
 	statusText 			= nil;
-	activeMap 			= nil;
 
 	onKeyPress = function (self, key)
 		if key == 'escape' then
@@ -113,8 +102,8 @@ Game = {
 
 	onDraw = function (self)
 		love.graphics.setColor(Colors.orange)
-		love.graphics.print(string.format("FPS: %s\np.v = {%s, %s};\np.pos = {%s, %s}", 
-			love.timer.getFPS(), me.v.x, me.v.y, me.pos.x, me.pos.y), 
+		love.graphics.print(string.format("FPS: %s\np.v = {%s};\np.pos = {%s, %s}", 
+			love.timer.getFPS(), self.me.v, self.me:getXY()), 
 			10, 10)
 	end;
 }
@@ -129,19 +118,20 @@ function love.load()
 	Game:addInteractive(Game)
 	Game:addDrawable(Game, 10)
 
-	map = Map("test")
-	Game:setMap(map)
+	local map = Map("test")
 	Game:addDrawable(map)
-	
+	Game.map = map
+
 	Game.collider = hc(Tile.Width, on_collision, on_collision_end);
 
 	local spawnEvent = map.events['spawn']
 
-	me = Player(spawnEvent.x, spawnEvent.y)
+	local me = Player(spawnEvent.x, spawnEvent.y)
 	Game:addActive(me)
 	Game:addInteractive(me)
 	Game:addDrawable(me)
 	Game:addCollidable(me, true)
+	Game.me = me
 
 	for _, t in ipairs(map:getTiles()) do
 		Game:addCollidable(t, false)
