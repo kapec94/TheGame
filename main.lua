@@ -11,6 +11,7 @@ GameObject 	= require "gameobject"
 Map			= require "map"
 Tile		= Map.Tile
 Player		= require "player"
+Camera		= require "camera"
 
 shapes.newRectangleShape = function (x, y, w, h)
 	x = x - w / 2
@@ -133,6 +134,10 @@ function love.load()
 	Game:addCollidable(me, true)
 	Game.me = me
 
+	local camera = Camera(me)
+	Game:addActive(camera)
+	Game.camera = camera
+
 	for _, t in ipairs(map:getTiles()) do
 		Game:addCollidable(t, false)
 	end
@@ -158,7 +163,9 @@ function love.update(dt)
 end
 
 function love.draw()
-	for _, d in ipairs(Game.drawables) do
+	Game.camera:attach()
+	for i=1, 9 do
+		local d = Game.drawables[i]
 		for _, v in ipairs(d) do
 			v:onDraw()
 		end
@@ -167,6 +174,12 @@ function love.draw()
 	for s, o in pairs(Game.shapes) do
 		s:draw('line')
 	end
+
+	Game.camera:detach()
+	for _, v in ipairs(Game.drawables[10]) do
+		v:onDraw()
+	end
+
 end
 
 function on_collision(dt, shape_a, shape_b, dx, dy)

@@ -42,6 +42,12 @@ local Map = class {
 	end;
 
 	onDraw = function (self)
+		local cam = Game.camera
+		local w, h = Config.Screen.Width, Config.Screen.Height
+		local x, y = cam:pos()
+
+		self.map:setDrawRange(x - w / 2, y - h / 2, w, h)
+		
 		love.graphics.setColor(Colors.white)
 		self.map:draw()
 	end;
