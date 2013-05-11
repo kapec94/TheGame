@@ -9,11 +9,6 @@ local Map = class {
 		init = function (self, x, y)
 			GameObject.init(self, x, y)
 		end;
-
-		getShape = function (self)
-			return shapes.newRectangleShape(
-				self.pos.x, self.pos.y, self.Width, self.Height)
-		end;
 	};
 	
 	init = function (self, name)
@@ -25,20 +20,12 @@ local Map = class {
 		Tile.Width = self.map.tileWidth
 		Tile.Height = self.map.tileHeight
 
-		self.tiles = {}
-		for x, y, tile in self.map('tiles'):iterate() do
-			local t = Tile((x + 0.5) * Tile.Width, (y + 0.5) * Tile.Height)
-			table.insert (self.tiles, t)
-		end
+		self.tiles = self.map('tiles')
 
 		self.events = {}
 		for i, o in ipairs(self.map('events').objects) do
 			self.events[o.name] = o
 		end
-	end;
-
-	getTiles = function (self)
-		return self.tiles
 	end;
 
 	onDraw = function (self)

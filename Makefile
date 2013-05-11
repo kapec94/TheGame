@@ -4,7 +4,7 @@ RM=rm -rf
 GAME=game.love
 
 game.love: *.lua
-	$(ZIP) $(GAME) *.lua hump HardonCollider atl res
+	$(ZIP) $(GAME) *.lua hump atl res
 
 all: game.love
 
