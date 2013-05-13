@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="36" height="27" tilewidth="40" tileheight="40">
+ <tileset firstgid="1" name="tileset" tilewidth="40" tileheight="40">
+  <image source="tileset.png" width="80" height="40"/>
+  <tile id="1">
+   <properties>
+    <property name="collision" value="1"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="tiles" width="36" height="27">
+  <data encoding="base64" compression="zlib">
+   eJzVlFEOwCAIQ433P/T+CcUWGrc14UcDfeDYXmvtn0Smab5SR9EX62Q1Wc/qHuW7hPwRE+JxMnV5HG954lBm4Pq+VL0xnw5PxnRD7I6iu9s8TO7EE/2/4vlNng3OY46Lp+p3ssdsHnqHjEepy3gogXgqtniGeDpMDE/mz85NZazyWB6GodKJp/JgelJ3IPpntTo8EyamN5ZH2alTnw4ehXvCyvbtYHHMzz0fZUZqHYcqL8dbuOMB1+ADrQ==
+  </data>
+ </layer>
+ <objectgroup name="events" width="36" height="27">
+  <object name="spawn" type="event" x="640" y="560"/>
+ </objectgroup>
+</map>

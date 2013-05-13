@@ -55,8 +55,6 @@ Game = {
 	drawables 			= {};
 	actives 			= {};
 
-	statusText 			= nil;
-
 	onKeyPress = function (self, key)
 		if key == 'escape' then
 			love.event.quit()
@@ -84,6 +82,8 @@ function love.load()
 	for i = 1, 10 do
 		table.insert(Game.drawables, {})
 	end
+
+	love.graphics.setBackgroundColor(Colors.black)
 
 	Game:addInteractive(Game)
 	Game:addDrawable(Game, 10)

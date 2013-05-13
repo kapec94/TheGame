@@ -3,7 +3,7 @@ local Player = class {
 
 	Width = 20;
 	Height = 20;
-	Color = Colors.cornflowerBlue;
+	Color = Colors.blue;
 
 	init = function (self, x, y)
 		GameObject.init(self, x, y)

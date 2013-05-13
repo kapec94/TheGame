@@ -1,8 +1,7 @@
-local Colors = {
-	white = { 255, 255, 255 },
-	black = { 0, 0, 0 },
-	cornflowerBlue = { 100, 149, 237 },
-	orange = { 0xCC, 0x66, 0x00 },
-	green = { 133, 153, 0 }
+return {
+	white 	= { 253, 246, 227 },
+	black 	= {   0,  43,  54 },
+	blue 	= {  38, 139, 210 },
+	orange 	= { 203,  75,  22 },
+	green 	= { 133, 153,   0 }
 }
-return Colors

@@ -22,6 +22,7 @@ local Map = class {
 
 		self.tiles = self.map('tiles')
 
+		self.map('events').visible = false
 		self.events = {}
 		for i, o in ipairs(self.map('events').objects) do
 			self.events[o.name] = o
