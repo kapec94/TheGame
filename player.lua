@@ -9,6 +9,8 @@ local Player = class {
 		GameObject.init(self, x, y)
 		self.v = vec(0, 0)
 		self.falling = true
+		self.moveleft = false
+		self.moveright = false
 	end;
 
 	onDraw = function (self)
@@ -19,22 +21,24 @@ local Player = class {
 
 	onKeyPress = function (self, key)
 		if key == 'left' then
-			self.v.x = -150
+			self.moveleft = true
 		end
 		if key == 'right' then
-			self.v.x = 150
+			self.moveright = true
 		end
 		if key == ' ' then
 			if not self.falling then
-				self.jumping = true
 				self.v.y = -math.sqrt(2 * 4 * Config.Gravity.y * self.Height)
 			end
 		end
 	end;
 
 	onKeyRelease = function (self, key)
-		if key == 'left' or key == 'right' then
-			self.v.x = 0
+		if key == 'left' and self.moveleft == true then
+			self.moveleft = false
+		end
+		if key == 'right' and self.moveright == true then
+			self.moveright = false
 		end
 	end;
 
@@ -62,6 +66,8 @@ local Player = class {
 			self.v = self.v + Config.Gravity * dt
 			self.falling = true
 		end
+
+		self.v.x = (self.moveleft and -150 or 0) + (self.moveright and 150 or 0)
 		
 		-- VERTICAL MOVEMENT
 		local dr = self.v.y * dt / Tile.Height
@@ -102,7 +108,7 @@ local Player = class {
 		dr = self.v.x * dt / Tile.Width
 		
 		if dr < 0 then
-			dr = -dr
+			dr = math.abs(dr)
 			t = -t
 			w = -w
 		end
