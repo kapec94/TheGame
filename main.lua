@@ -70,8 +70,8 @@ Game = {
 			"p.v = %s;\np.pos = %s\n" ..
 			"falling = %s",
 			love.timer.getFPS(), 
-			me.v, me.pos,
-			me.falling), 
+			tostring(me.v), tostring(me.pos),
+			tostring(me.falling)), 
 		10, 10)
 	end;
 }

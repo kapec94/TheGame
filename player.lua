@@ -1,3 +1,41 @@
+-- wow, now that's obsfucated function, ain't it.
+-- pos - current object position in given dimention
+-- dr - moving offset
+-- collision_fn - boolean function checking if there's a collision going
+-- object_size - object's size in given dimention
+-- tile_size - tile's size in given dimention
+-- RETURN VALUE: <bool indicating if there is a collision to resolve>, <resolved position>
+local function resolve_collision(pos, dr, object_size, tile_size, collision_fn)
+	local function clamp(val)
+		if math.abs(val) > 1 then
+			return math.abs(val) / val
+		else
+			return val
+		end
+	end
+
+	local t = 1
+	local s = object_size / 2
+	local round = math.floor
+	if dr < 0 then
+		dr = math.abs(dr)
+		t = -t
+		s = -s
+		round = math.ceil
+	end
+	while dr ~= 0 do
+		local newpos = pos + clamp(dr) * t * tile_size
+		if collision_fn(newpos + s) then
+			return true, round((newpos + s) / tile_size) * tile_size - s
+		else
+			pos = newpos
+			dr = dr - math.abs(t)
+			if dr < 0 then dr = 0 end
+		end
+	end
+	return false, pos
+end;
+
 local Player = class {
 	__includes = GameObject;
 
@@ -49,96 +87,35 @@ local Player = class {
 
 	onUpdate = function (self, dt)
 		local map = Game.map
-		local x, y = 
-			(self.pos.x / Tile.Width), 
-			(self.pos.y / Tile.Height)
-
-		local w, h = 
-			(self.Width / 2) / Tile.Width,
-			(self.Height / 2) / Tile.Height
-
-		-- one tile. You'll understand.
-		local t = 1
+		local x, y = self.pos.x, self.pos.y
+		local w, h = self.Width / 2, self.Height / 2
 
 		-- Gravity first of all.
-		if map.tiles(math.floor(x - w), math.floor(y + h)) == nil
-		and map.tiles(math.floor(x + w), math.floor(y + h)) == nil then
+		if map:sample(x - w, y + h) == nil and map:sample(x + w - 1, y + h) == nil then
 			self.v = self.v + Config.Gravity * dt
 			self.falling = true
 		end
 
 		self.v.x = (self.moveleft and -150 or 0) + (self.moveright and 150 or 0)
-		
-		-- VERTICAL MOVEMENT
-		local dr = self.v.y * dt / Tile.Height
-		if dr < 0 then
-			dr = math.abs(dr)
-			h = -h
-			t = -t
-		end
-		while dr ~= 0 do
-			-- There's still more than one tile to go through
-			if dr > math.abs(t) then
-				local nx, ny = math.floor(x), math.floor(y + h + t)
-				if map.tiles(nx, ny) ~= nil then
-					self.v.y = 0
-					self.falling = false
-					y = ny - h
-					dr = 0
-				else
-					y = y + t
-					dr = dr - math.abs(t)
-				end
-			else
-				local nx, ny = math.floor(x), math.floor(y + h + dr)
-				if map.tiles(nx, ny) ~= nil then
-					self.v.y = 0
-					self.falling = false
-					y = ny - h
-				else
-					-- May cause undefined behaviour when math.abs(t) ~= 1
-					y = y + dr * t
-				end
-				dr = 0
-			end
+
+		-- I hate this part, but it has to be done.	
+		local x_collision, x = resolve_collision(
+			x, self.v.x * dt / Tile.Width, 
+			self.Width, Tile.Width,
+			function (pos) return map:sample(pos, y) ~= nil end)
+		local y_collision, y = resolve_collision(
+			y, self.v.y * dt / Tile.Height,
+			self.Height, Tile.Height,
+			function (pos) return map:sample(x, pos) ~= nil end)
+
+		if x_collision == true then self.v.x = 0 end
+		if y_collision == true then 
+			self.v.y = 0 
+			self.falling = false
 		end
 
-		-- HORIZONTAL MOVEMENT
-		t = 1
-		dr = self.v.x * dt / Tile.Width
-		
-		if dr < 0 then
-			dr = math.abs(dr)
-			t = -t
-			w = -w
-		end
-		while dr ~= 0 do
-			-- There's still more than one tile to go through
-			if dr > math.abs(t) then
-				local nx, ny = math.floor(x + w + t), math.floor(y)
-				if map.tiles(nx, ny) ~= nil then
-					self.v.x = 0
-					x = nx - w
-					dr = 0
-				else
-					x = x + t
-					dr = dr - math.abs(t)
-				end
-			else
-				local nx, ny = math.floor(x + h + dr), math.floor(y)
-				if map.tiles(nx, ny) ~= nil then
-					self.v.x = 0
-					x = nx - w
-				else
-					-- May cause undefined behaviour when math.abs(t) ~= 1
-					x = x + dr * t
-				end
-				dr = 0
-			end
-		end
-		
-		self.pos.x = x * Tile.Width
-		self.pos.y = y * Tile.Height
+		self.pos.x = x
+		self.pos.y = y
 	end;
 }
 

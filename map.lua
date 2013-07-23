@@ -3,14 +3,8 @@ atl.Loader.path = Config.MapPath or './'
 
 
 local Map = class {
-	Tile = class {
-		__includes = GameObject;
+	Tile = {};
 
-		init = function (self, x, y)
-			GameObject.init(self, x, y)
-		end;
-	};
-	
 	init = function (self, name)
 		self.name = name
 		self.map = atl.Loader.load(name .. ".tmx")
@@ -27,6 +21,10 @@ local Map = class {
 		for i, o in ipairs(self.map('events').objects) do
 			self.events[o.name] = o
 		end
+	end;
+
+	sample = function (self, x, y)
+		return self.tiles(math.floor(x / Tile.Width), math.floor(y / Tile.Height))
 	end;
 
 	onDraw = function (self)
