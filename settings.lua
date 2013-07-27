@@ -5,6 +5,7 @@ local Config = {
 	},
 	Gravity = vec(0, 1200),
 	MapPath = "res/maps/",
+	Map = "test2",
 	Debug = true
 }
 

@@ -65,17 +65,48 @@ Game = {
 		self.keypressHooks[obj.id] = nil
 		self.keyreleaseHooks[obj.id] = nil
 	end;
-	
-	obj_count			= 0;
-	keypressHooks 		= {};
-	keyreleaseHooks		= {};
-	layers				= {};
-	drawables			= {};
-	actives 			= {};
+
+	obj_count = 0;
+	keypressHooks = {};
+	keyreleaseHooks = {};
+	layers = {};
+	drawables = {};
+	actives = {};
 
 	onKeyPress = function (self, key)
 		if key == 'escape' then
 			love.event.quit()
+		end
+	end;
+
+	onUpdate = function (self, dt)
+		local function rects_intersect(r1, r2)
+			-- found on StackOverflow.
+			-- [1] - left
+			-- [2] - top
+			-- [3] - width
+			-- [4] - height
+			return not (r2[1] > r1[1] + r1[3] or
+				r2[1] + r2[3] < r1[1] or
+				r2[2] > r1[2] + r1[4] or
+				r2[2] + r2[4] < r1[2])
+		end
+		for i, e in ipairs(self.map.events) do
+			local me = self.me
+			local me_rect = {
+				me.pos.x, me.pos.y,
+				me.Width, me.Height
+			}
+			local sign_rect = {
+				e.x, e.y,
+				e.width, e.height
+			}
+			if rects_intersect(me_rect, sign_rect) then
+				e:trigger(me)
+			else
+				-- Boy, that escalated quickly.
+				e:kill(me)
+			end
 		end
 	end;
 
@@ -107,14 +138,15 @@ function love.load()
 
 	Game.id = Game:registerObject(Game)
 	Game:addInteractive(Game)
+	Game:addActive(Game)
 	Game:addDrawable(Game, 10)
 
-	local map = Map("test")
+	local map = Map(Config.Map)
 	Game:addDrawable(map)
 	Game.map = map
 
-	local spawnEvent = map.events['spawn']
-	local me = Player(spawnEvent.x, spawnEvent.y)
+	local spawnEvent = map.spawn
+	local me = Player(spawnEvent.x + spawnEvent.width / 2, spawnEvent.y + spawnEvent.height / 2)
 	Game:addActive(me)
 	Game:addInteractive(me)
 	Game:addDrawable(me)

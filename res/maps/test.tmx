@@ -15,5 +15,6 @@
  </layer>
  <objectgroup name="events" width="36" height="27">
   <object name="spawn" type="event" x="640" y="560"/>
+  <object name="spawn" type="event" x="640" y="560"/>
  </objectgroup>
 </map>

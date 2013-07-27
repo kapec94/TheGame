@@ -1,9 +1,63 @@
 local atl = require "atl"
 atl.Loader.path = Config.MapPath or './'
 
+local Event = class {
+	init = function (self, atl_object)
+		self.id = Game:registerObject(self)
+		self.x = atl_object.x
+		self.y = atl_object.y		
+		self.width = atl_object.width
+		self.height = atl_object.height
+		self.atl = atl_object
+		self.active = false
+	end;
+
+	trigger = function (self)
+		if not self.active then
+			self:onTrigger()
+			self.active = true
+		end
+	end;
+
+	kill = function (self)
+		if self.active then
+			self:onKill()
+			self.active = false
+		end
+	end;
+
+	onTrigger = function (self) end;
+	onKill = function (self) end;
+}
+
+local Events = {
+	['sign'] = class {
+		__includes = Event;	
+
+		init = function (self, atl_object)
+			Event.init(self, atl_object)
+		end;
+
+		onTrigger = function (self)
+			Game:addDrawable(self)
+		end;
+
+		onKill = function (self)
+			Game:removeDrawable(self)
+		end;
+
+		onDraw = function (self)
+			love.graphics.push()
+			love.graphics.setColor(Colors.green)
+			love.graphics.printf(self.atl.name, self.x - self.width / 2, self.y - self.height / 2, self.width * 2, 'center')
+			love.graphics.pop()
+		end;
+	}
+}
+
 local Map = class {
 	Tile = {};
-
+	
 	init = function (self, name)
 		self.id = Game:registerObject(self)
 
@@ -17,10 +71,15 @@ local Map = class {
 
 		self.tiles = self.map('tiles')
 
-		self.map('events').visible = Config.Debug
 		self.events = {}
+		self.map('events').visible = Config.Debug
 		for i, o in ipairs(self.map('events').objects) do
-			self.events[o.name] = o
+			if o.type == 'spawn' then
+				self.spawn = Event(o)
+			else
+				local event = Events[o.type]		
+				table.insert(self.events, event and event(o) or Event(o))
+			end
 		end
 	end;
 

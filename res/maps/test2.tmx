@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="100" tilewidth="40" tileheight="40">
+ <tileset firstgid="1" name="tileset" tilewidth="40" tileheight="40">
+  <image source="tileset.png" width="320" height="80"/>
+ </tileset>
+ <layer name="tiles" width="100" height="100">
+  <data encoding="base64" compression="zlib">
+   eJztnI1uqzAMhdPeruv7P/EVWqN5rv8CDjJwjhTRtWUQfzu2A2iv1toLo9SAagg8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8agk8aimDB57nytOM+IHLes2MG5iMKyNmdzak3w8uMW2NFWcgMenHgXxt4UFjr72mx4F8ZfCQ/AEe6zS7ftDjQL6yeEiv+XEgX+BRS1m9qJWr+nEgX3utDcAjJvCopT14YH0e1148oJjAo5a28ojsCx5xreVh/V8B3J9aLyteXoyX8U2G9j4Ul8bDi310wBtj4jy2xF7yCjQmKSdpOUhjpeUy8BhXJNbad8EhXxKLaFxnxP7qPCN5yNo3Q1ruu6Ki/dNe5wAeMSZb4uMxBo9fjfAY9dBIHwYmP7J4PNpnPLPWJeAhy1pfPNonk9G4c5ZgYUuKw1f7y4OPESYWq6dyfPD4GY/39t97PMh2C5e9eRyZLz/nzqBzuDedxzKe7xGp+/Q4fb9MHmfIf90PnYXniQgTrXY/2ciO35l4cAaeL77IaynWlA9nIH13a/zO0h/0c+U8lp8tJvz7FgPps5ewXRu/M/VrlIfkkXv7rO/Sd7W8ZfnBy1ujczg6i0X9fHvcqSf4c+u81vNeS2Ni5auMGJ6FxSLOw2LCP9PqPo01zU8jvVUGjyOK5quIR7hPPCbUL5RHZK0+OoczcOH1g3uE+0MaXh/c4z/S64LHXxYRDt7aXeOR3Q9djYc1vF6L85jVm56ZR8Qj/D2rpnvrDPD4lcZD80kkV3F/0DoOHrboeUt/9xIH+h545IrzsPKVlLfoWuTV9JwV5ZExjyvw4D7h/vBqeqSeZ83jKjwsj/St5hGPR+Y8jspi0Ui+ivDgPul5KuvaYWQeV+ER6bOkvEWZgIctiYe3/tN6K63f8nhkz+OKPDw2GhPwsLWmv+L1RLpuwhll3pv15nE1HhoL657Vk2zhEV0ajxGPRK7/dm/MZHKGNYhUO9Z4xLr2KPGYwcTicRQmWi2P+CN6n4TXD5q/eq3PiNuZeGi9UwYPiQllkxW/q/IYZdGHxCP7mtYZeFhriwweve+y7lll1hXwiHvEWpdkXufi+93e51hdFo8Mj2j9Fl030lri+WTt3/qtHYMJ5SHFdpSHtK+Xt3ifFfXLqDqTysrmoa0p+bWU/nNnpHHIfJbx1uoz0XhsqR2aR7RrKdLzKDOenbu1+kwyeXge0/JWZ8Dz1Uv4bCubq/CIcPJ6rCweHpcr8tBqCPcH7684j9FnTCNMqvOY7ZFIPbFq+RV5zGRirQt5/pI4bGVCuVRmsYif92yfaIyW9zRPZPBYRvVavkg7971yl8YiK19xHvecsE1TZB575K7s2I/Uk0qKzmNmbe8jMzcdefwH7/E75g==
+  </data>
+ </layer>
+ <objectgroup name="events" width="100" height="100">
+  <object name="spawn" type="spawn" x="411" y="2027" width="40" height="40"/>
+  <object name="Gdzie ja jestem..?" type="sign" x="495" y="2003" width="88" height="74"/>
+ </objectgroup>
+</map>
