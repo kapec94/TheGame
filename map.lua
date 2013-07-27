@@ -1,11 +1,12 @@
 local atl = require "atl"
 atl.Loader.path = Config.MapPath or './'
 
-
 local Map = class {
 	Tile = {};
 
 	init = function (self, name)
+		self.id = Game:registerObject(self)
+
 		self.name = name
 		self.map = atl.Loader.load(name .. ".tmx")
 		self.width = self.map.width
@@ -16,7 +17,7 @@ local Map = class {
 
 		self.tiles = self.map('tiles')
 
-		self.map('events').visible = false
+		self.map('events').visible = Config.Debug
 		self.events = {}
 		for i, o in ipairs(self.map('events').objects) do
 			self.events[o.name] = o

@@ -4,7 +4,8 @@ local Config = {
 		Height = 360 
 	},
 	Gravity = vec(0, 1200),
-	MapPath = "res/maps/"
+	MapPath = "res/maps/",
+	Debug = true
 }
 
 return Config

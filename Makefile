@@ -8,5 +8,5 @@ game.love: *.lua
 
 all: game.love
 
-clear:
+clean:
 	$(RM) $(GAME) 

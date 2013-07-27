@@ -44,7 +44,8 @@ local Player = class {
 	Color = Colors.blue;
 
 	init = function (self, x, y)
-		GameObject.init(self, x, y)
+		self.id = Game:registerObject(self)
+		self.pos = vec(x, y)
 		self.v = vec(0, 0)
 		self.falling = true
 		self.moveleft = false
