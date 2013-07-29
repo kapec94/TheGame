@@ -1,11 +1,11 @@
 local atl = require "atl"
-atl.Loader.path = Config.MapPath or './'
+atl.Loader.path = Config.resourcePath(Config.MapPath or '/')
 
 local Event = class {
 	init = function (self, atl_object)
 		self.id = Game:registerObject(self)
 		self.x = atl_object.x
-		self.y = atl_object.y		
+		self.y = atl_object.y
 		self.width = atl_object.width
 		self.height = atl_object.height
 		self.atl = atl_object
@@ -32,11 +32,7 @@ local Event = class {
 
 local Events = {
 	['sign'] = class {
-		__includes = Event;	
-
-		init = function (self, atl_object)
-			Event.init(self, atl_object)
-		end;
+		__includes = Event;
 
 		onTrigger = function (self)
 			Game:addDrawable(self)
@@ -77,7 +73,7 @@ local Map = class {
 			if o.type == 'spawn' then
 				self.spawn = Event(o)
 			else
-				local event = Events[o.type]		
+				local event = Events[o.type]
 				table.insert(self.events, event and event(o) or Event(o))
 			end
 		end
@@ -93,7 +89,7 @@ local Map = class {
 		local x, y = cam:pos()
 
 		self.map:setDrawRange(x - w / 2, y - h / 2, w, h)
-		
+
 		love.graphics.setColor(Colors.white)
 		self.map:draw()
 	end;

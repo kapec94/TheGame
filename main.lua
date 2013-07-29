@@ -2,6 +2,7 @@
 
 vec = require "hump.vector"
 class = require "hump.class"
+Config = require "settings"
 
 vec.unpack = function (self)
 	return self.x, self.y
@@ -13,7 +14,6 @@ function debug(msg, ...)
 	end
 end
 
-Config = require "settings"
 Colors = require "colors"
 Map = require "map"
 Tile = Map.Tile
@@ -30,37 +30,39 @@ Game = {
 	addDrawable = function (self, obj, index)
 		index = index or 5
 
-		assert (obj)	
+		assert (obj.id)
 		assert (obj.onDraw)
 		assert (index >= 1 and index <= 10)
 
 		self.layers[index][obj.id] = obj
 		self.drawables[obj.id] = obj
 	end;
-	
+
 	addActive = function (self, obj)
+		assert (obj.id)
 		assert (obj.onUpdate)
 		self.actives[obj.id] = obj
 	end;
-	
+
 	addInteractive = function (self, obj)
+		assert (obj.id)
 		assert (obj.onKeyPress ~= nil or obj.onKeyRelease ~= nil)
 		if obj.onKeyPress then
 			self.keypressHooks[obj.id] = obj
 		end
 		if obj.onKeyRelease then
-			self.keyreleaseHooks[obj.id] = obj 
+			self.keyreleaseHooks[obj.id] = obj
 		end
 	end;
 
 	removeDrawable = function (self, obj)
 		self.drawables[obj.id] = nil
 	end;
-	
+
 	removeActive = function (self, obj)
 		self.actives[obj.id] = nil
 	end;
-	
+
 	removeInteractive = function (self, obj)
 		self.keypressHooks[obj.id] = nil
 		self.keyreleaseHooks[obj.id] = nil
@@ -149,7 +151,7 @@ function love.load()
 	local me = Player(spawnEvent.x + spawnEvent.width / 2, spawnEvent.y + spawnEvent.height / 2)
 	Game:addActive(me)
 	Game:addInteractive(me)
-	Game:addDrawable(me)
+	Game:addDrawable(me, 1)
 	Game.me = me
 
 	local camera = Camera(me)
@@ -177,7 +179,7 @@ end
 
 function love.draw()
 	Game.camera:attach()
-	for i=1, 9 do
+	for i=9, 1, -1 do
 		local l = Game.layers[i]
 		for id, v in pairs(l) do
 			if Game.drawables[id] ~= nil then
