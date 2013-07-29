@@ -48,12 +48,32 @@ local Events = {
 			love.graphics.printf(self.atl.name, self.x - self.width / 2, self.y - self.height / 2, self.width * 2, 'center')
 			love.graphics.pop()
 		end;
+	},
+
+	-- Note to self. Hints SHALT NOT INTERSECT THEMSELVES.
+	['hint'] = class {
+		__includes = Event;
+
+		init = function (self, atl)
+			Event.init(self, atl)
+			self.message = atl.name
+		end;
+
+		onTrigger = function (self)
+			debug ('Step into hint: \'' .. self.message .. '\'')
+			GUI.HintButton:setActive()
+			GUI.HintButton:setMessage(self.message)
+		end;
+
+		onKill = function (self)
+			GUI.HintButton:setActive(false)
+		end;
 	}
 }
 
 local Map = class {
 	Tile = {};
-	
+
 	init = function (self, name)
 		self.id = Game:registerObject(self)
 

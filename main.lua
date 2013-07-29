@@ -19,12 +19,19 @@ Map = require "map"
 Tile = Map.Tile
 Player = require "player"
 Camera = require "camera"
+GUI = require "gui"
 
 Game = {
 	registerObject = function (self, object)
 		self.obj_count = self.obj_count + 1
 		debug ('Registering object with id', self.obj_count)
 		return self.obj_count
+	end;
+
+	pause = function (self, paused)
+		if paused == nil then paused = true end
+		debug ('Settings Game.paused to ' .. tostring(paused))
+		self.paused = paused
 	end;
 
 	addDrawable = function (self, obj, index)
@@ -74,10 +81,11 @@ Game = {
 	layers = {};
 	drawables = {};
 	actives = {};
+	paused = false;
 
 	onKeyPress = function (self, key)
 		if key == 'escape' then
-			love.event.quit()
+		--	love.event.quit()
 		end
 	end;
 
@@ -111,37 +119,29 @@ Game = {
 			end
 		end
 	end;
-
-	onDraw = function (self)
-		if Config.Debug then
-			love.graphics.setColor(Colors.orange)
-			local me = self.me
-			local col = me.collisions
-			love.graphics.print(string.format(
-				"FPS: %s\n" ..
-				"p.v = %s;\np.pos = %s\n" ..
-				"falling = %s",
-				love.timer.getFPS(), 
-				tostring(me.v), tostring(me.pos),
-				tostring(me.falling)), 
-			10, 10)
-		end
-	end;
 }
 
 function love.load()
 	love.graphics.setMode(Config.Screen.Width, Config.Screen.Height)
+	love.graphics.setFont(love.graphics.newFont(Config.resourcePath(Config.Font), 14))
 
 	for i = 1, 10 do
 		table.insert(Game.layers, {})
 	end
 
-	love.graphics.setBackgroundColor(Colors.black)
-
 	Game.id = Game:registerObject(Game)
 	Game:addInteractive(Game)
 	Game:addActive(Game)
-	Game:addDrawable(Game, 10)
+
+	if Config.Debug then
+		GUI.DebugInfo.id = Game:registerObject(GUI.DebugInfo)
+		Game:addDrawable(GUI.DebugInfo, 10)
+	end
+
+	GUI.HintButton.id = Game:registerObject(GUI.HintButton)
+	GUI.HintButton:init()
+	Game:addDrawable(GUI.HintButton, 10)
+	Game:addInteractive(GUI.HintButton)
 
 	local map = Map(Config.Map)
 	Game:addDrawable(map)
@@ -172,8 +172,10 @@ function love.keyreleased(key, unicode)
 end
 
 function love.update(dt)
-	for id, o in pairs(Game.actives) do
-		o:onUpdate(dt)
+	if not Game.paused then
+		for id, o in pairs(Game.actives) do
+			o:onUpdate(dt)
+		end
 	end
 end
 
