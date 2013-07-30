@@ -99,19 +99,19 @@ local Player = class {
 
 		self.v.x = (self.moveleft and -150 or 0) + (self.moveright and 150 or 0)
 
-		-- I hate this part, but it has to be done.	
+		-- I hate this part, but it has to be done.
 		local x_collision, x = resolve_collision(
-			x, self.v.x * dt / Tile.Width, 
+			x, self.v.x * dt / Tile.Width,
 			self.Width, Tile.Width,
-			function (pos) return map:sample(pos, y) ~= nil end)
+			function (pos) return map:isCollidable(pos, y) end)
 		local y_collision, y = resolve_collision(
 			y, self.v.y * dt / Tile.Height,
 			self.Height, Tile.Height,
-			function (pos) return map:sample(x, pos) ~= nil end)
+			function (pos) return map:isCollidable(x, pos) end)
 
 		if x_collision == true then self.v.x = 0 end
-		if y_collision == true then 
-			self.v.y = 0 
+		if y_collision == true then
+			self.v.y = 0
 			self.falling = false
 		end
 

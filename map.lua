@@ -103,6 +103,15 @@ local Map = class {
 		return self.tiles(math.floor(x / Tile.Width), math.floor(y / Tile.Height))
 	end;
 
+	isCollidable = function (self, x, y)
+		local tile = self:sample(x, y)
+		return tile ~= nil or
+			x >= self.width * Tile.Width or
+			x < 0 or
+			y >= self.height * Tile.Height or
+			y < 0
+	end;
+
 	onDraw = function (self)
 		local cam = Game.camera
 		local w, h = Config.Screen.Width, Config.Screen.Height
