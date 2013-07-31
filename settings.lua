@@ -6,7 +6,7 @@ local Config = {
 	Gravity = vec(0, 1200),
 	Resources = "res", -- NO FUCKING SLASH AT THE END
 	MapPath = "/maps/",
-	Font = "/Ubuntu-R.ttf",
+	Font = "Ubuntu-R",
 	Map = "test2",
 	Debug = true
 }
@@ -16,7 +16,7 @@ if not (love.filesystem.exists(Config.Resources) and love.filesystem.isDirectory
 end
 
 Config.resourcePath = function (relative_path)
-	return Config.Resources .. relative_path
+	return Config.Resources .. '/' .. relative_path
 end
 
 return Config

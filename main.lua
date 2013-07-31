@@ -20,6 +20,7 @@ Tile = Map.Tile
 Player = require "player"
 Camera = require "camera"
 GUI = require "gui"
+require 'fonts'
 
 Game = {
 	registerObject = function (self, object)
@@ -123,7 +124,7 @@ Game = {
 
 function love.load()
 	love.graphics.setMode(Config.Screen.Width, Config.Screen.Height)
-	love.graphics.setFont(love.graphics.newFont(Config.resourcePath(Config.Font), 14))
+	love.graphics.setFont(Fonts.get(Config.Font, 14))
 
 	for i = 1, 10 do
 		table.insert(Game.layers, {})

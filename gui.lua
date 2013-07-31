@@ -29,7 +29,7 @@ return {
 		active = false;
 
 		init = function (self)
-			self.font = love.graphics.newFont(Config.resourcePath(Config.Font), self.FontSize)
+			self.font = Fonts.get(Config.Font, self.FontSize)
 			self.active = false
 			self.message = nil
 			self.x = Config.Screen.Width - self.Size - self.Margin
@@ -66,6 +66,52 @@ return {
 	};
 
 	Message = {
+		Label = class {
+			init = function (self)
+				-- Those variables are to set by the user
+				self.message = 'Label'
+				self.x = 0
+				self.y = 0
+				self.font = Fonts.get('Ubuntu-R', 24)
+				self.color = Colors.white
+
+				self.visible = false
+				self.layer = -1
+
+				self.id = Game:registerObject(self)
+			end;
+
+			show = function (self, layer)
+				if not self.visible then
+					Game:addDrawable(self, layer)
+					self.layer = layer
+					self.visible = true
+				elseif layer ~= self.layer then
+					self:hide()
+					self:show(layer)
+				end
+			end;
+
+			hide = function (self)
+				self.layer = -1
+				self.visible = false
+				Game:removeDrawable(self)
+			end;
+
+			onDraw = function (self)
+				local font = love.graphics.getFont()
+				love.graphics.setFont(self.font)
+				love.graphics.setColor(self.color)
+
+				love.graphics.push()
+				love.graphics.translate(self.x, self.y)
+				love.graphics.print(self.message, 0, 0)
+				love.graphics.pop()
+
+				love.graphics.setFont(font)
+			end;
+		};
+
 		ModalBox = class {
 			init = function (self)
 				self.id = Game:registerObject(self)

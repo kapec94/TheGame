@@ -34,12 +34,22 @@ local Events = {
 	['sign'] = class {
 		__includes = Event;
 
+		init = function (self, atl)
+			Event.init(self, atl)
+			self.message = atl.name
+			self.label = GUI.Message.Label()
+
+			self.label.message = self.message
+			self.label.x = tonumber(atl.properties['x'] or 10)
+			self.label.y = tonumber(atl.properties['y'] or 10)
+		end;
+
 		onTrigger = function (self)
-			Game:addDrawable(self)
+			self.label:show(10)
 		end;
 
 		onKill = function (self)
-			Game:removeDrawable(self)
+			self.label:hide()
 		end;
 
 		onDraw = function (self)
