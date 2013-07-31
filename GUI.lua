@@ -1,4 +1,4 @@
-return {
+GUI = {
 	DebugInfo = {
 		info = {
 			{ 'FPS', love.timer.getFPS },

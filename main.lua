@@ -2,7 +2,8 @@
 
 vec = require "hump.vector"
 class = require "hump.class"
-Config = require "settings"
+
+require "Config"
 
 vec.unpack = function (self)
 	return self.x, self.y
@@ -14,13 +15,12 @@ function debug(msg, ...)
 	end
 end
 
-Colors = require "colors"
-Map = require "map"
-Tile = Map.Tile
-Player = require "player"
-Camera = require "camera"
-GUI = require "gui"
-require 'fonts'
+require "Colors"
+require "Map"
+require "Player"
+require "Camera"
+require "GUI"
+require "Fonts"
 
 Game = {
 	registerObject = function (self, object)

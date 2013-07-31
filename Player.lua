@@ -36,9 +36,7 @@ local function resolve_collision(pos, dr, object_size, tile_size, collision_fn)
 	return false, pos
 end;
 
-local Player = class {
-	__includes = GameObject;
-
+Player = class {
 	Width = 20;
 	Height = 20;
 	Color = Colors.blue;
@@ -101,12 +99,12 @@ local Player = class {
 
 		-- I hate this part, but it has to be done.
 		local x_collision, x = resolve_collision(
-			x, self.v.x * dt / Tile.Width,
-			self.Width, Tile.Width,
+			x, self.v.x * dt / map.tileWidth,
+			self.Width, map.tileWidth,
 			function (pos) return map:isCollidable(pos, y) end)
 		local y_collision, y = resolve_collision(
-			y, self.v.y * dt / Tile.Height,
-			self.Height, Tile.Height,
+			y, self.v.y * dt / map.tileHeight,
+			self.Height, map.tileHeight,
 			function (pos) return map:isCollidable(x, pos) end)
 
 		if x_collision == true then self.v.x = 0 end

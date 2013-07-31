@@ -1,4 +1,4 @@
-local Config = {
+Config = {
 	Screen = {
 		Width = 480,
 		Height = 360
@@ -18,5 +18,3 @@ end
 Config.resourcePath = function (relative_path)
 	return Config.Resources .. '/' .. relative_path
 end
-
-return Config

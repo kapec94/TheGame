@@ -81,9 +81,7 @@ local Events = {
 	}
 }
 
-local Map = class {
-	Tile = {};
-
+Map = class {
 	init = function (self, name)
 		self.id = Game:registerObject(self)
 
@@ -92,8 +90,8 @@ local Map = class {
 		self.width = self.map.width
 		self.height = self.map.height
 
-		Tile.Width = self.map.tileWidth
-		Tile.Height = self.map.tileHeight
+		self.tileWidth = self.map.tileWidth
+		self.tileHeight = self.map.tileHeight
 
 		self.tiles = self.map('tiles')
 
@@ -110,15 +108,15 @@ local Map = class {
 	end;
 
 	sample = function (self, x, y)
-		return self.tiles(math.floor(x / Tile.Width), math.floor(y / Tile.Height))
+		return self.tiles(math.floor(x / self.tileWidth), math.floor(y / self.tileHeight))
 	end;
 
 	isCollidable = function (self, x, y)
 		local tile = self:sample(x, y)
 		return tile ~= nil or
-			x >= self.width * Tile.Width or
+			x >= self.width * self.tileWidth or
 			x < 0 or
-			y >= self.height * Tile.Height or
+			y >= self.height * self.tileHeight or
 			y < 0
 	end;
 
@@ -133,5 +131,3 @@ local Map = class {
 		self.map:draw()
 	end;
 }
-
-return Map
