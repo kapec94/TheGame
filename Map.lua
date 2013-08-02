@@ -2,14 +2,18 @@ local atl = require "atl"
 atl.Loader.path = Config.resourcePath(Config.MapPath or '/')
 
 local Event = class {
-	init = function (self, atl_object)
+	init = function (self, atl_object, map)
+		debug ('Loading event ' .. atl_object.name)
+
 		self.id = Game:registerObject(self)
+		self.name = atl_object.name
 		self.x = atl_object.x
 		self.y = atl_object.y
 		self.width = atl_object.width
 		self.height = atl_object.height
 		self.atl = atl_object
 		self.active = false
+		self.map = map
 	end;
 
 	trigger = function (self)
@@ -36,9 +40,10 @@ local Events = {
 
 		init = function (self, atl)
 			Event.init(self, atl)
-			self.message = atl.name
-			self.label = GUI.Message.Label()
+			self.message = atl.properties['message']
+			assert (self.message)
 
+			self.label = GUI.Message.Label()
 			self.label.message = self.message
 			self.label.x = tonumber(atl.properties['x'] or 10)
 			self.label.y = tonumber(atl.properties['y'] or 10)
@@ -64,9 +69,10 @@ local Events = {
 	['hint'] = class {
 		__includes = Event;
 
-		init = function (self, atl)
-			Event.init(self, atl)
-			self.message = atl.name
+		init = function (self, atl, map)
+			Event.init(self, atl, map)
+			self.message = atl.properties['message']
+			assert (self.message)
 		end;
 
 		onTrigger = function (self)
@@ -77,6 +83,26 @@ local Events = {
 
 		onKill = function (self)
 			GUI.HintButton:setActive(false)
+		end;
+	},
+
+	['remove'] = class {
+		__includes = Event;
+
+		init = function (self, atl, map)
+			Event.init(self, atl, map)
+
+			self.target = self.atl.properties['event']
+			assert (self.target)
+		end;
+
+		onTrigger = function (self)
+			debug ('Removing event ' .. self.target)
+			self.map.events[self.target]:kill(self)
+			self.map.events[self.target] = nil
+
+			-- Autodestroying.
+			self.map.events[self.name] = nil
 		end;
 	}
 }
@@ -96,15 +122,15 @@ Map = class {
 		self.tiles = self.map('tiles')
 
 		self.events = {}
-		self.map('events').visible = Config.Debug
 		for i, o in ipairs(self.map('events').objects) do
 			if o.type == 'spawn' then
 				self.spawn = Event(o)
 			else
 				local event = Events[o.type]
-				table.insert(self.events, event and event(o) or Event(o))
+				self.events[o.name] = event and event(o, self) or Event(o, self)
 			end
 		end
+		self.map('events').visible = false
 	end;
 
 	sample = function (self, x, y)

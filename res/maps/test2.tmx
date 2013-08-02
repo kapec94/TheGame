@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="24" height="20" tilewidth="40" tileheight="40">
+<map version="1.0" orientation="orthogonal" width="60" height="20" tilewidth="40" tileheight="40">
  <properties>
   <property name="exit_right" value="level1"/>
  </properties>
@@ -9,20 +9,37 @@
  <tileset firstgid="17" name="hints" tilewidth="40" tileheight="40">
   <image source="hints.png" width="200" height="40"/>
  </tileset>
- <layer name="background" width="24" height="20">
+ <layer name="background" width="60" height="20">
   <data encoding="base64" compression="zlib">
-   eJxjZGBgYBzFo3gUj+JRTFXMikYPhP2sA2j/KCaMATgpAfU=
+   eJztziEOACAMBMGr6P+/jCUIbBMYMVm7laQAAAC46qO/6830C/C+BXH0BMU=
   </data>
  </layer>
- <layer name="tiles" width="24" height="20">
+ <layer name="tiles" width="60" height="20">
   <data encoding="base64" compression="zlib">
-   eJztklEKwCAMQwvWfze3+191fqwQQtXBKExYIRQkvtCqyF9fqBLMTsHsJDEzJNLK/IhCfvT+c0CGsRX4bzIKCfk2Q3Z8rBHbOPx3OGe7+w65s+wMu+hl4Huo47dem46mE7x8v8dmL56rk9vzjxhPvbM9rKwLfbsEXg==
+   eJztk4cKwzAMRAW2C937/3+1EUREUeVZ0TiQg6PD8llPTgA2bdq0dt2WbiAh7O1qnOcM86yFrBejLGJ10O8dI+vZKMsJ9yhkPRllrYEXWY9GWb2zopD1YJTFeXt9f5F1b5TFeQP8n/lm4BoRq4eJ9xfmkl5kDZ67G01zJ3vxv1O+14jz8rNaZkprvB+tnvMFmPfu2LqH6R40TvrNOUp5Ne77+PmA+cxTc6A7SdVz3hyPZpqZ1n8tr5wdn3GAeU/Pwa/Bb1Yr92v8QeR5tldmpHhjay28sXO9MGeKzcvBN3PtuaVu4eXzzlk+j9rd5mpjzC3sLbxWLmGz9pK8SzinD+LaCX0=
   </data>
  </layer>
- <objectgroup name="events" width="24" height="20">
-  <object name="spawn" type="spawn" x="329" y="496" width="20" height="20"/>
-  <object name="Poszukuję Ciebie." type="sign" x="394" y="371" width="164" height="147"/>
-  <object name="Naciskanie strzałek na klawiaturze sprawia, że się poruszam. A może to świat porusza się wokół mnie?" type="hint" x="259" y="391" width="161" height="128"/>
-  <object name="Spacja sprawia, że podskakuję. A może to świat spada w dół?" type="hint" x="559" y="464" width="201" height="95"/>
+ <objectgroup name="events" width="60" height="20">
+  <object name="sign_lookforyou" type="sign" x="394" y="371" width="164" height="147">
+   <properties>
+    <property name="message" value="Poszukuję Ciebie."/>
+   </properties>
+  </object>
+  <object name="hint_arrows" type="hint" x="259" y="391" width="161" height="128">
+   <properties>
+    <property name="message" value="Naciskanie strzałek na klawiaturze sprawia, że się poruszam. A może to świat porusza się wokół mnie?"/>
+   </properties>
+  </object>
+  <object name="hint_space" type="hint" x="559" y="464" width="201" height="95">
+   <properties>
+    <property name="message" value="Spacja sprawia, że podskakuję. A może to świat spada w dół?"/>
+   </properties>
+  </object>
+  <object name="remove_lookforyou" type="remove" x="560" y="140" width="47" height="419">
+   <properties>
+    <property name="event" value="sign_lookforyou"/>
+   </properties>
+  </object>
+  <object name="me" type="spawn" x="329" y="496" width="20" height="20"/>
  </objectgroup>
 </map>

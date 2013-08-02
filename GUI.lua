@@ -7,6 +7,10 @@ GUI = {
 			{ 'falling', function () return Game.me.falling end }
 		};
 
+		init = function (self)
+			self.id = Game:registerObject(self)
+		end;
+
 		onDraw = function (self)
 			love.graphics.push()
 			love.graphics.setColor(Colors.orange)
@@ -18,6 +22,32 @@ GUI = {
 
 			love.graphics.print(msg, 10, 10)
 			love.graphics.pop()
+		end;
+	};
+
+	DebugEventRenderer = {
+		Color = { 255, 255, 255, 100 };
+
+		init = function (self, map)
+			assert (map)
+
+			self.id = Game:registerObject(self)
+			self.font = Fonts.get(Config.Font, 12)
+			self.map = map
+		end;
+
+		onDraw = function (self)
+			local old_font = love.graphics.getFont()
+
+			love.graphics.setColor(self.Color)
+			love.graphics.setFont(self.font)
+
+			for name, e in pairs (self.map.events) do
+				love.graphics.rectangle('line', e.x, e.y, e.width, e.height)
+				love.graphics.print(name, e.x + 5, e.y - 18)
+			end
+
+			love.graphics.setFont(old_font)
 		end;
 	};
 

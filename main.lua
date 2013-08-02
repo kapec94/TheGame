@@ -102,7 +102,7 @@ Game = {
 				r2[2] > r1[2] + r1[4] or
 				r2[2] + r2[4] < r1[2])
 		end
-		for i, e in ipairs(self.map.events) do
+		for name, e in pairs(self.map.events) do
 			local me = self.me
 			local me_rect = {
 				me.pos.x, me.pos.y,
@@ -134,11 +134,6 @@ function love.load()
 	Game:addInteractive(Game)
 	Game:addActive(Game)
 
-	if Config.Debug then
-		GUI.DebugInfo.id = Game:registerObject(GUI.DebugInfo)
-		Game:addDrawable(GUI.DebugInfo, 10)
-	end
-
 	GUI.HintButton.id = Game:registerObject(GUI.HintButton)
 	GUI.HintButton:init()
 	Game:addDrawable(GUI.HintButton, 10)
@@ -158,6 +153,14 @@ function love.load()
 	local camera = Camera(me)
 	Game:addActive(camera)
 	Game.camera = camera
+
+	if Config.Debug then
+		GUI.DebugInfo:init()
+		GUI.DebugEventRenderer:init(map)
+
+		Game:addDrawable(GUI.DebugInfo, 10)
+		Game:addDrawable(GUI.DebugEventRenderer, 2)
+	end
 end
 
 function love.keypressed(key, unicode)
