@@ -8,7 +8,15 @@ GUI = {
 		};
 
 		init = function (self)
-			self.id = Game:registerObject(self)
+			Game:registerObject(self)
+		end;
+
+		show = function (self, layer)
+			Game:addDrawable(self, layer)
+		end;
+
+		hide = function (self)
+			Game:removeDrawable(self)
 		end;
 
 		onDraw = function (self)
@@ -31,9 +39,17 @@ GUI = {
 		init = function (self, map)
 			assert (map)
 
-			self.id = Game:registerObject(self)
+			Game:registerObject(self)
 			self.font = Fonts.get(Config.Font, 12)
 			self.map = map
+		end;
+
+		show = function (self, layer)
+			Game:addDrawable(self, layer)
+		end;
+
+		hide = function (self)
+			Game:removeDrawable(self)
 		end;
 
 		onDraw = function (self)
@@ -64,15 +80,23 @@ GUI = {
 			self.message = nil
 			self.x = Config.Screen.Width - self.Size - self.Margin
 			self.y = self.Margin
+
+			Game:registerObject(self)
 		end;
 
 		setActive = function (self, active)
 			if active == nil then active = true end
-			self.active = active
-		end;
-
-		setMessage = function (self, message)
-			self.message = message
+			if active ~= self.active then
+				if self.active == false then
+					Game:addDrawable(self, 10)
+					Game:addInteractive(self)
+					self.active = true
+				else
+					Game:removeDrawable(self)
+					Game:removeInteractive(self)
+					self.active = false
+				end
+			end
 		end;
 
 		onKeyPress = function (self, key)
@@ -83,15 +107,13 @@ GUI = {
 		end;
 
 		onDraw = function (self)
-			if self.active then
-				local old_font = love.graphics.getFont()
-				love.graphics.setFont(self.font)
+			local old_font = love.graphics.getFont()
+			love.graphics.setFont(self.font)
 
-				love.graphics.setColor(Colors.red)
-				love.graphics.printf('?', self.x, self.y, self.Size, 'center')
+			love.graphics.setColor(Colors.red)
+			love.graphics.printf('?', self.x, self.y, self.Size, 'center')
 
-				love.graphics.setFont(old_font)
-			end
+			love.graphics.setFont(old_font)
 		end;
 	};
 
@@ -108,7 +130,7 @@ GUI = {
 				self.visible = false
 				self.layer = -1
 
-				self.id = Game:registerObject(self)
+				Game:registerObject(self)
 			end;
 
 			show = function (self, layer)
@@ -144,12 +166,8 @@ GUI = {
 
 		ModalBox = class {
 			init = function (self)
-				self.id = Game:registerObject(self)
-				self.message = 'Kinda dummy message'
-			end;
-
-			setMessage = function (self, message)
-				self.message = message
+				Game:registerObject(self)
+				self.message = nil
 			end;
 
 			onDraw = function (self)

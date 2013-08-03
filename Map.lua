@@ -5,7 +5,7 @@ local Event = class {
 	init = function (self, atl_object, map)
 		debug ('Loading event ' .. atl_object.name)
 
-		self.id = Game:registerObject(self)
+		Game:registerObject(self)
 		self.name = atl_object.name
 		self.x = atl_object.x
 		self.y = atl_object.y
@@ -56,13 +56,6 @@ local Events = {
 		onKill = function (self)
 			self.label:hide()
 		end;
-
-		onDraw = function (self)
-			love.graphics.push()
-			love.graphics.setColor(Colors.green)
-			love.graphics.printf(self.atl.name, self.x - self.width / 2, self.y - self.height / 2, self.width * 2, 'center')
-			love.graphics.pop()
-		end;
 	},
 
 	-- Note to self. Hints SHALT NOT INTERSECT THEMSELVES.
@@ -78,7 +71,7 @@ local Events = {
 		onTrigger = function (self)
 			debug ('Step into hint: \'' .. self.message .. '\'')
 			GUI.HintButton:setActive()
-			GUI.HintButton:setMessage(self.message)
+			GUI.HintButton.message = self.message
 		end;
 
 		onKill = function (self)
@@ -109,8 +102,6 @@ local Events = {
 
 Map = class {
 	init = function (self, name)
-		self.id = Game:registerObject(self)
-
 		self.name = name
 		self.map = atl.Loader.load(name .. ".tmx")
 		self.width = self.map.width
@@ -135,6 +126,9 @@ Map = class {
 
 		self.map('events').visible = false
 		self.map('actors').visible = false
+
+		Game:registerObject(self)
+		Game:addDrawable(self)
 	end;
 
 	sample = function (self, x, y)

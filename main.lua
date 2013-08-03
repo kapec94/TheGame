@@ -17,7 +17,6 @@ end
 
 require "Colors"
 require "Map"
-require "Player"
 require "Actors"
 require "Camera"
 require "GUI"
@@ -26,8 +25,9 @@ require "Fonts"
 Game = {
 	registerObject = function (self, object)
 		self.obj_count = self.obj_count + 1
-		debug ('Registering object with id', self.obj_count)
-		return self.obj_count
+		debug ('Registering object with id ' .. tostring(self.obj_count))
+
+		object.id = self.obj_count
 	end;
 
 	pause = function (self, paused)
@@ -131,20 +131,15 @@ function love.load()
 		table.insert(Game.layers, {})
 	end
 
-	Game.id = Game:registerObject(Game)
+	Game:registerObject(Game)
 	Game:addInteractive(Game)
 	Game:addActive(Game)
 
-	GUI.HintButton.id = Game:registerObject(GUI.HintButton)
 	GUI.HintButton:init()
-	Game:addDrawable(GUI.HintButton, 10)
-	Game:addInteractive(GUI.HintButton)
 
-	local map = Map(Config.Map)
-	Game:addDrawable(map)
-	Game.map = map
-
-	Game.me = map.actors['me']
+	Game.map = Map(Config.Map)
+	Game.me = Game.map.actors['me']
+	assert (Game.me)
 
 	local camera = Camera(Game.me)
 	Game:addActive(camera)
@@ -152,10 +147,10 @@ function love.load()
 
 	if Config.Debug then
 		GUI.DebugInfo:init()
-		GUI.DebugEventRenderer:init(map)
+		GUI.DebugEventRenderer:init(Game.map)
 
-		Game:addDrawable(GUI.DebugInfo, 10)
-		Game:addDrawable(GUI.DebugEventRenderer, 2)
+		GUI.DebugInfo:show(10)
+		GUI.DebugEventRenderer:show(2)
 	end
 end
 
