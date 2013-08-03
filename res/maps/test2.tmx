@@ -16,7 +16,7 @@
  </layer>
  <layer name="tiles" width="60" height="20">
   <data encoding="base64" compression="zlib">
-   eJztk4cKwzAMRAW2C937/3+1EUREUeVZ0TiQg6PD8llPTgA2bdq0dt2WbiAh7O1qnOcM86yFrBejLGJ10O8dI+vZKMsJ9yhkPRllrYEXWY9GWb2zopD1YJTFeXt9f5F1b5TFeQP8n/lm4BoRq4eJ9xfmkl5kDZ67G01zJ3vxv1O+14jz8rNaZkprvB+tnvMFmPfu2LqH6R40TvrNOUp5Ne77+PmA+cxTc6A7SdVz3hyPZpqZ1n8tr5wdn3GAeU/Pwa/Bb1Yr92v8QeR5tldmpHhjay28sXO9MGeKzcvBN3PtuaVu4eXzzlk+j9rd5mpjzC3sLbxWLmGz9pK8SzinD+LaCX0=
+   eJztkwsLwyAMhAPqYG/3+v9/dQ1Ues1ibV1GHfTg2EN7yZdsRJs2bfp3xbUbmBD3djXOc4Z51mLWi1FWYnXU7o6Z9WyU5YRbFLOejLL+gZdZj0ZZrbOymPVglIW8rf5/mXVvlIW8gX7PHEWNaOAlSqyeBt5vmEu9xL4W3uG6u95p7slefO+U90uEvFirZqbpDPvR9ol8gca9Ozj3NOxB40yfkWMur8Z961/vNJ751BzSTqbuI2+JRzMpnLW8cnY440Djnh6dn51fcFc+r/EHkefhWZkxxZs7q+HN1fXCyJSbl6NP5qV157qGF+ddsvw9arst3c0x17DX8Fp5Dpu11+RdwyW9AWEoCbE=
   </data>
  </layer>
  <objectgroup name="events" width="60" height="20">
@@ -40,6 +40,9 @@
     <property name="event" value="sign_lookforyou"/>
    </properties>
   </object>
-  <object name="me" type="spawn" x="329" y="496" width="20" height="20"/>
+ </objectgroup>
+ <objectgroup name="actors" width="60" height="20">
+  <object name="block" type="Block" x="1379" y="383" width="48" height="48"/>
+  <object name="me" type="Player" x="329" y="496" width="20" height="20"/>
  </objectgroup>
 </map>

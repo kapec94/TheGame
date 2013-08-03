@@ -18,6 +18,7 @@ end
 require "Colors"
 require "Map"
 require "Player"
+require "Actors"
 require "Camera"
 require "GUI"
 require "Fonts"
@@ -106,7 +107,7 @@ Game = {
 			local me = self.me
 			local me_rect = {
 				me.pos.x, me.pos.y,
-				me.Width, me.Height
+				me.width, me.height
 			}
 			local sign_rect = {
 				e.x, e.y,
@@ -143,14 +144,9 @@ function love.load()
 	Game:addDrawable(map)
 	Game.map = map
 
-	local spawnEvent = map.spawn
-	local me = Player(spawnEvent.x + spawnEvent.width / 2, spawnEvent.y + spawnEvent.height / 2)
-	Game:addActive(me)
-	Game:addInteractive(me)
-	Game:addDrawable(me, 1)
-	Game.me = me
+	Game.me = map.actors['me']
 
-	local camera = Camera(me)
+	local camera = Camera(Game.me)
 	Game:addActive(camera)
 	Game.camera = camera
 

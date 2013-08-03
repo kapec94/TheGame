@@ -122,15 +122,19 @@ Map = class {
 		self.tiles = self.map('tiles')
 
 		self.events = {}
+		self.actors = {}
 		for i, o in ipairs(self.map('events').objects) do
-			if o.type == 'spawn' then
-				self.spawn = Event(o)
-			else
-				local event = Events[o.type]
-				self.events[o.name] = event and event(o, self) or Event(o, self)
-			end
+			local event = Events[o.type]
+			self.events[o.name] = event and event(o, self) or Event(o, self)
 		end
+		for i, o in ipairs(self.map('actors').objects) do
+			local actor = Actors[o.type]
+			if actor == nil then debug ('UNKNOWN ACTOR ' .. o.type) end
+			self.actors[o.name] = actor and actor(o, self) or nil
+		end
+
 		self.map('events').visible = false
+		self.map('actors').visible = false
 	end;
 
 	sample = function (self, x, y)
