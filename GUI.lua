@@ -3,7 +3,7 @@ GUI = {
 		info = {
 			{ 'FPS', love.timer.getFPS },
 			{ 'me.v', function () return Game.me.v end },
-			{ 'me.pos', function () return Game.me.pos end },
+			{ 'me.pos', function () return vec(Game.me.x, Game.me.y) end },
 			{ 'falling', function () return Game.me.falling end }
 		};
 

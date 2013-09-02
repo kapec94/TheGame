@@ -106,7 +106,7 @@ Game = {
 		for name, e in pairs(self.map.events) do
 			local me = self.me
 			local me_rect = {
-				me.pos.x, me.pos.y,
+				me.x, me.y,
 				me.width, me.height
 			}
 			local sign_rect = {

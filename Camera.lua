@@ -1,11 +1,11 @@
 local cam = require 'hump.camera'
 
 function Camera(player)
-	local c = cam(vec.unpack(player.pos))
+	local c = cam(player.x, player.y)
 	Game:registerObject(c)
 
 	c.onUpdate = function (self, dt)
-		local x, y = vec.unpack(player.pos)
+		local x, y = player.x, player.y
 		local cx, cy = self:pos()
 		local map = Game.map
 		local mw, mh = map.width * map.tileWidth, map.height * map.tileHeight

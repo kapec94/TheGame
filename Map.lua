@@ -112,8 +112,11 @@ Map = class {
 
 		self.tiles = self.map('tiles')
 
+		self.currentCollidableId = 0
+
 		self.events = {}
 		self.actors = {}
+		self.collidables = {}
 		for i, o in ipairs(self.map('events').objects) do
 			local event = Events[o.type]
 			self.events[o.name] = event and event(o, self) or Event(o, self)
@@ -135,19 +138,40 @@ Map = class {
 		return self.tiles(math.floor(x / self.tileWidth), math.floor(y / self.tileHeight))
 	end;
 
-	isCollidable = function (self, x, y)
+	flagCollidable = function (self, obj)
+		assert (obj.hitTest)
+		table.insert(self.collidables, obj)
+	end;
+
+	setCurrentCollidable = function (self, obj)
+		self.currentCollidableId = obj.id
+	end;
+
+	hitTest = function (self, x, y)
 		local tile = self:sample(x, y)
-		return tile ~= nil or
-			x >= self.width * self.tileWidth or
+
+		if tile ~= nil then return true end
+		if x >= self.width * self.tileWidth or
 			x < 0 or
 			y >= self.height * self.tileHeight or
 			y < 0
+		then
+			return true
+		end
+		for i, o in ipairs(self.collidables) do
+			if self.currentCollidableId ~= o.id then
+				if o:hitTest(x - o.x + o.width / 2, y - o.y + o.height / 2) then
+					return true
+				end
+			end
+		end
+		return false
 	end;
 
 	onDraw = function (self)
 		local cam = Game.camera
 		local w, h = Config.Screen.Width, Config.Screen.Height
-		local x, y = cam:pos()
+		local x, y = cam.x, cam.y
 
 		self.map:setDrawRange(x - w / 2, y - h / 2, w, h)
 
