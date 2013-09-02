@@ -3,7 +3,7 @@ atl.Loader.path = Config.resourcePath(Config.MapPath or '/')
 
 local Event = class {
 	init = function (self, atl_object, map)
-		debug ('Loading event ' .. atl_object.name)
+		dbg ('Loading event ' .. atl_object.name)
 
 		Game:registerObject(self)
 		self.name = atl_object.name
@@ -69,7 +69,7 @@ local Events = {
 		end;
 
 		onTrigger = function (self)
-			debug ('Step into hint: \'' .. self.message .. '\'')
+			dbg ('Step into hint: \'' .. self.message .. '\'')
 			GUI.HintButton:setActive()
 			GUI.HintButton.message = self.message
 		end;
@@ -90,7 +90,7 @@ local Events = {
 		end;
 
 		onTrigger = function (self)
-			debug ('Removing event ' .. self.target)
+			dbg ('Removing event ' .. self.target)
 			self.map.events[self.target]:kill(self)
 			self.map.events[self.target] = nil
 
@@ -120,7 +120,7 @@ Map = class {
 		end
 		for i, o in ipairs(self.map('actors').objects) do
 			local actor = Actors[o.type]
-			if actor == nil then debug ('UNKNOWN ACTOR ' .. o.type) end
+			if actor == nil then dbg ('UNKNOWN ACTOR ' .. o.type) end
 			self.actors[o.name] = actor and actor(o, self) or nil
 		end
 

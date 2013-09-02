@@ -9,15 +9,15 @@ Fonts = {
 		local font_name = name .. '$' .. tostring(size)
 		local font = Fonts.font_cache[font_name]
 
-		debug ('Loading font ' .. font_name)
+		dbg ('Loading font ' .. font_name)
 
 		if font == nil then
-			debug ('Caching font object.')
+			dbg ('Caching font object.')
 
 			local file_data = Fonts.file_cache[name]
 			if file_data == nil then
 				local path = Config.resourcePath(name .. '.ttf')
-				debug ('Caching font file ' .. path)
+				dbg ('Caching font file ' .. path)
 				assert (love.filesystem.exists(path))
 
 				local file = love.filesystem.newFile(path)

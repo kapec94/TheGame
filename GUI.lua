@@ -101,7 +101,7 @@ GUI = {
 
 		onKeyPress = function (self, key)
 			if (love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift')) and key == '/' then
-				debug ('Activated hint.')
+				dbg ('Activated hint.')
 				GUI.Message.showModalBox(self.message)
 			end
 		end;
@@ -186,7 +186,7 @@ GUI = {
 			end;
 
 			close = function (self)
-				debug ('Modal box closing')
+				dbg ('Modal box closing')
 				self:onClose()
 			end;
 

@@ -9,9 +9,9 @@ vec.unpack = function (self)
 	return self.x, self.y
 end
 
-function debug(msg, ...)
+function dbg(msg, ...)
 	if Config.Debug then
-		print ('[debug]', msg, ...)
+		print (string.format('[dbg] ' .. msg, ...))
 	end
 end
 
@@ -25,14 +25,14 @@ require "Fonts"
 Game = {
 	registerObject = function (self, object)
 		self.obj_count = self.obj_count + 1
-		debug ('Registering object with id ' .. tostring(self.obj_count))
+		dbg ('Registering object with id ' .. tostring(self.obj_count))
 
 		object.id = self.obj_count
 	end;
 
 	pause = function (self, paused)
 		if paused == nil then paused = true end
-		debug ('Settings Game.paused to ' .. tostring(paused))
+		dbg ('Settings Game.paused to ' .. tostring(paused))
 		self.paused = paused
 	end;
 
