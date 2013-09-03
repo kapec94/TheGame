@@ -124,7 +124,6 @@ Game = {
 }
 
 function love.load()
-	love.graphics.setMode(Config.Screen.Width, Config.Screen.Height)
 	love.graphics.setFont(Fonts.get(Config.Font, 14))
 
 	for i = 1, 10 do

@@ -1,5 +1,5 @@
 local atl = require "atl"
-atl.Loader.path = Config.resourcePath(Config.MapPath or '/')
+atl.Loader.path = 'res/maps/'
 
 local Event = class {
 	init = function (self, atl_object, map)
@@ -170,7 +170,7 @@ Map = class {
 
 	onDraw = function (self)
 		local cam = Game.camera
-		local w, h = Config.Screen.Width, Config.Screen.Height
+		local w, h = love.graphics.getWidth(), love.graphics.getHeight()
 		local x, y = cam.x, cam.y
 
 		self.map:setDrawRange(x - w / 2, y - h / 2, w, h)

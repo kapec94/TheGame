@@ -16,7 +16,7 @@ Fonts = {
 
 			local file_data = Fonts.file_cache[name]
 			if file_data == nil then
-				local path = Config.resourcePath(name .. '.ttf')
+				local path = string.format('res/%s.ttf', name)
 				dbg ('Caching font file ' .. path)
 				assert (love.filesystem.exists(path))
 

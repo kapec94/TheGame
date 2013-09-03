@@ -78,7 +78,7 @@ GUI = {
 			self.font = Fonts.get(Config.Font, self.FontSize)
 			self.active = false
 			self.message = nil
-			self.x = Config.Screen.Width - self.Size - self.Margin
+			self.x = love.graphics.getWidth() - self.Size - self.Margin
 			self.y = self.Margin
 
 			Game:registerObject(self)
@@ -172,11 +172,12 @@ GUI = {
 
 			onDraw = function (self)
 				local c = Colors.black
+				local w, h = love.graphics.getWidth(), love.graphics.getHeight()
 				love.graphics.setColor(c[1], c[2], c[3], 200)
-				love.graphics.rectangle('fill', 0, 0, Config.Screen.Width, Config.Screen.Height)
+				love.graphics.rectangle('fill', 0, 0, w, h)
 
 				love.graphics.setColor(Colors.white)
-				love.graphics.printf(self.message, 100, 100, Config.Screen.Width - 200)
+				love.graphics.printf(self.message, 100, 100, w - 200)
 			end;
 
 			onKeyPress = function (self, key)
