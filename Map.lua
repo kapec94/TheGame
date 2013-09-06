@@ -101,6 +101,9 @@ local Events = {
 }
 
 Map = class {
+	-- Type assertions for the poor.
+	isMap = true;
+
 	init = function (self, name)
 		self.name = name
 		self.map = atl.Loader.load(name .. ".tmx")
@@ -150,22 +153,26 @@ Map = class {
 	hitTest = function (self, x, y)
 		local tile = self:sample(x, y)
 
-		if tile ~= nil then return true end
+		if tile ~= nil then return true, self end
 		if x >= self.width * self.tileWidth or
 			x < 0 or
 			y >= self.height * self.tileHeight or
 			y < 0
 		then
-			return true
+			return true, self
 		end
 		for i, o in ipairs(self.collidables) do
 			if self.currentCollidableId ~= o.id then
 				if o:hitTest(x - o.x + o.width / 2, y - o.y + o.height / 2) then
-					return true
+					return true, o
 				end
 			end
 		end
 		return false
+	end;
+
+	onCollision = function (self, collidable, dx, dy)
+		-- Well, we don't give a shit, as we're the damn world!
 	end;
 
 	onDraw = function (self)

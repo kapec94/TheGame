@@ -1,4 +1,6 @@
 local Actor = class {
+	isActor = true;
+
 	init = function (self, atl_object, map)
 		assert (map)
 
@@ -16,6 +18,7 @@ local Actor = class {
 
 local Collidable = class {
 	__includes = Actor;
+	isCollidable = true;
 
 	init = function (self, atl_object, map)
 		Actor.init(self, atl_object, map)
@@ -35,7 +38,11 @@ local Collidable = class {
 	-- dr - moving offset
 	-- collision_fn - boolean function checking if there's a collision going
 	-- object_size - object's size in given dimention
-	-- RETURN VALUE: <bool indicating if there is a collision to resolve>, <resolved position>
+	-- RETURN VALUE:
+	-- * <bool indicating if there is a collision to resolve>,
+	-- * <new position>,
+	-- * <object we just collided with (in any)>,
+	-- * <how 'far' we're in this object (if any)>
 	resolve_collision = function (self, pos, dr, object_size, collision_fn)
 		local function clamp(val)
 			if math.abs(val) > 1 then
@@ -60,19 +67,20 @@ local Collidable = class {
 		end
 		while dr ~= 0 do
 			local newpos = pos + clamp(dr) * t * step
-			if collision_fn(newpos + s) then
-				local delta = round(newpos - pos)
+			local collides, obj = collision_fn(newpos + s)
+			if collides then
+				local delta = newpos - pos
 				while collision_fn(pos + delta + s) do
-					delta = delta - t
+					delta = delta - clamp(delta)
 				end
-				return true, round(pos + delta + t)
+				return true, newpos, obj, newpos - pos - delta
 			else
 				pos = newpos
 				dr = dr - math.abs(t)
 				if dr < 0 then dr = 0 end
 			end
 		end
-		return false, pos
+		return false, pos, nil, 0
 	end;
 
 	onUpdate = function (self, dt)
@@ -89,31 +97,56 @@ local Collidable = class {
 		end
 
 		local hitTestX = function (x)
-			return map:hitTest(x, y - h / 2 + 1) or map:hitTest(x, y + h / 2 - 1)
+			local collision, obj = map:hitTest(x, y - h / 2 + 1)
+			if collision then return true, obj end
+
+			collision, obj = map:hitTest(x, y + h / 2 - 1)
+			if collision then return true, obj end
 		end
 		local hitTestY = function (y)
-			return map:hitTest(x - w / 2 + 1, y) or map:hitTest(x + w / 2 - 1, y)
+			local collision, obj = map:hitTest(x - w / 2 + 1, y)
+			if collision then return true, obj end
+
+			collision, obj = map:hitTest(x + w / 2 - 1, y)
+			if collision then return true, obj end
 		end
 
-		local x_collision, x = self:resolve_collision(x, self.v.x * dt, w, hitTestX)
-		local y_collision, y = self:resolve_collision(y, self.v.y * dt, h, hitTestY)
+		local x_collision, x, obj_x, dx = self:resolve_collision(x, self.v.x * dt, w, hitTestX)
+		local y_collision, y, obj_y, dy = self:resolve_collision(y, self.v.y * dt, h, hitTestY)
 
-		if x_collision == true then
+		self.x = x
+		self.y = y
+
+		if x_collision then
+			obj_x:onCollision(self, -dx, 0)
+			self:onCollision(obj_x, dx, 0)
+		end
+		if y_collision then
+			obj_y:onCollision(self, 0, -dy)
+			self:onCollision(obj_y, 0, dy)
+		end
+	end;
+
+	onCollision = function (self, collidable, dx, dy)
+		if dx ~= 0 then
 			self.v.x = 0
 		end
-		if y_collision == true then
+		if dy ~= 0 then
 			self.v.y = 0
 			self.falling = false
 		end
 
-		self.x = x
-		self.y = y
+		if collidable.isMap then
+			self.x = self.x - dx
+			self.y = self.y - dy
+		end
 	end;
 }
 
 Actors = {
 	['Player'] = class {
 		__includes = Collidable;
+		isPlayer = true;
 
 		Color = Colors.blue;
 		Speed = vec(200, 200);
@@ -144,7 +177,7 @@ Actors = {
 			end
 			if key == ' ' then
 				if not self.falling then
-					self.v.y = -math.sqrt(2 * 4 * Config.Gravity.y * self.height)
+					self.v.y = -math.sqrt(3 * 4 * Config.Gravity.y * self.height)
 				end
 			end
 		end;
@@ -162,10 +195,18 @@ Actors = {
 			self.v.x = (self.moveleft and -self.Speed.x or 0) + (self.moveright and self.Speed.x or 0)
 			self.__includes.onUpdate(self, dt)
 		end;
+
+		onCollision = function (self, collidable, dx, dy)
+			self.__includes.onCollision(self, collidable, dx, dy)
+			if collidable.isBlock then
+				self.y = self.y - dy
+			end
+		end;
 	},
 
 	['Block'] = class {
 		__includes = Collidable;
+		isBlock = true;
 
 		init = function (self, atl_object, map)
 			Collidable.init(self, atl_object, map)
@@ -178,6 +219,13 @@ Actors = {
 			love.graphics.setColor(Colors.red)
 			love.graphics.rectangle('fill', self.x - self.width / 2, self.y - self.height / 2,
 				self.width, self.height)
+		end;
+
+		onCollision = function (self, collidable, dx, dy)
+			self.__includes.onCollision(self, collidable, dx, dy)
+			if collidable.isPlayer then
+				self.x = self.x - dx
+			end
 		end;
 	}
 }
