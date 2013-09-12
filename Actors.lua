@@ -145,7 +145,7 @@ local Collidable = class {
 }
 
 Actors = {
-	['Player'] = class {
+	['player'] = class {
 		__includes = Collidable;
 		isPlayer = true;
 
@@ -205,7 +205,7 @@ Actors = {
 		end;
 	},
 
-	['Block'] = class {
+	['block'] = class {
 		__includes = Collidable;
 		isBlock = true;
 

@@ -42,7 +42,7 @@
   </object>
  </objectgroup>
  <objectgroup name="actors" width="60" height="20">
-  <object name="block" type="Block" x="1339" y="413" width="24" height="24"/>
-  <object name="me" type="Player" x="329" y="496" width="20" height="20"/>
+  <object name="block" type="block" x="1339" y="413" width="24" height="24"/>
+  <object name="me" type="player" x="329" y="496" width="20" height="20"/>
  </objectgroup>
 </map>
