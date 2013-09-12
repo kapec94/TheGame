@@ -59,8 +59,9 @@ GUI = {
 			love.graphics.setFont(self.font)
 
 			for name, e in pairs (self.map.events) do
-				love.graphics.rectangle('line', e.x, e.y, e.width, e.height)
-				love.graphics.print(name, e.x + 5, e.y - 18)
+				local x, y = e.x - e.width / 2, e.y - e.height / 2
+				love.graphics.rectangle('line', x, y, e.width, e.height)
+				love.graphics.print(name, x + 5, y - 18)
 			end
 
 			love.graphics.setFont(old_font)

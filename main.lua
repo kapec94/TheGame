@@ -90,37 +90,6 @@ Game = {
 		--	love.event.quit()
 		end
 	end;
-
-	onUpdate = function (self, dt)
-		local function rects_intersect(r1, r2)
-			-- found on StackOverflow.
-			-- [1] - left
-			-- [2] - top
-			-- [3] - width
-			-- [4] - height
-			return not (r2[1] > r1[1] + r1[3] or
-				r2[1] + r2[3] < r1[1] or
-				r2[2] > r1[2] + r1[4] or
-				r2[2] + r2[4] < r1[2])
-		end
-		for name, e in pairs(self.map.events) do
-			local me = self.me
-			local me_rect = {
-				me.x, me.y,
-				me.width, me.height
-			}
-			local sign_rect = {
-				e.x, e.y,
-				e.width, e.height
-			}
-			if rects_intersect(me_rect, sign_rect) then
-				e:trigger(me)
-			else
-				-- Boy, that escalated quickly.
-				e:kill(me)
-			end
-		end
-	end;
 }
 
 function love.load()
@@ -132,7 +101,6 @@ function love.load()
 
 	Game:registerObject(Game)
 	Game:addInteractive(Game)
-	Game:addActive(Game)
 
 	GUI.HintButton:init()
 

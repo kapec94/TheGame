@@ -2,15 +2,16 @@ local Actor = class {
 	isActor = true;
 
 	init = function (self, atl_object, map)
-		assert (map)
+		dbg ('Loading actor ' .. atl_object.name)
 
-		self.x = atl_object.x
-		self.y = atl_object.y
+		self.name = atl_object.name
 		self.width = atl_object.width
 		self.height = atl_object.height
+		self.x = atl_object.x + self.width / 2
+		self.y = atl_object.y + self.height / 2
 		self.map = map
 
-		dbg (atl_object.name .. ' is ' .. atl_object.type)
+		assert (self.map)
 
 		Game:registerObject(self)
 	end;
@@ -26,7 +27,7 @@ local Collidable = class {
 		self.v = vec(0, 0)
 		self.falling = true
 
-		self.map:flagCollidable(self)
+		self.map:addCollidable(self)
 	end;
 
 	hitTest = function (self, x, y)

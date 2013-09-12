@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="60" height="20" tilewidth="40" tileheight="40">
  <properties>
-  <property name="exit_right" value="level1"/>
+  <property name="defaultActor" value="me"/>
  </properties>
  <tileset firstgid="1" name="tileset" tilewidth="40" tileheight="40">
   <image source="tileset.png" width="320" height="80"/>
