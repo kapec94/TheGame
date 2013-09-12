@@ -132,6 +132,43 @@ local Events = {
 			self.map:removeEvent(self.name)
 		end;
 	},
+
+	['trap'] = class {
+		__includes = Event;
+
+		init = function (self, atl, map)
+			Event.init(self, atl, map)
+
+			self.target = self.atl.properties['target']
+			self.triggerMethod = self.atl.properties['trigger']
+			self.killMethod = self.atl.properties['kill']
+			assert (self.target)
+			assert (self.triggerMethod or self.killMethod)
+		end;
+
+		_call = function (self, object, method)
+			assert (object)
+
+			local fn = object[method]
+			assert (fn)
+
+			object[method](object)
+		end;
+
+		onTrigger = function (self)
+			if self.triggerMethod then
+				dbg ('trap %s activated. Calling %s:%s.', self.name, self.target, self.triggerMethod)
+				self:_call(self.map.actors[self.target], self.triggerMethod)
+			end
+		end;
+
+		onKill = function (self)
+			if self.killMethod then
+				dbg ('trap %s deactivated. Calling %s:%s.', self.name, self.target, self.killMethod)
+				self:_call(self.map.actors[self.target], self.killMethod)
+			end
+		end;
+	},
 }
 
 Map = class {

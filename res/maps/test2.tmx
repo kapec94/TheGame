@@ -16,7 +16,7 @@
  </layer>
  <layer name="tiles" width="60" height="20">
   <data encoding="base64" compression="zlib">
-   eJztkwsLwyAMhAPqYG/3+v9/dQ1Ues1ibV1GHfTg2EN7yZdsRJs2bfp3xbUbmBD3djXOc4Z51mLWi1FWYnXU7o6Z9WyU5YRbFLOejLL+gZdZj0ZZrbOymPVglIW8rf5/mXVvlIW8gX7PHEWNaOAlSqyeBt5vmEu9xL4W3uG6u95p7slefO+U90uEvFirZqbpDPvR9ol8gca9Ozj3NOxB40yfkWMur8Z961/vNJ751BzSTqbuI2+JRzMpnLW8cnY440Djnh6dn51fcFc+r/EHkefhWZkxxZs7q+HN1fXCyJSbl6NP5qV157qGF+ddsvw9arst3c0x17DX8Fp5Dpu11+RdwyW9AWEoCbE=
+   eJztlG0PgyAMhEmYfnBucW///6+OJlxsGiqV4ZTES5rpLHIPJzh36tRxNYS6hpr2NvInEecY6l4wrkX1bs7YKmL129jZXOSdsh1X9PtYLWZM+VK2g7Hfi2pNyNaaVeu8yLY39rfMSsLZXJJvi/sXZ7P1vOK8ndueeVLqJu6t45bGpATWi5t5f2HOeZjiXFR9rI5dw4sUxsjzZu1+5LzImHOvWUs8w3u80o85wIzenO+LUiW8Ke5H/H0yj7m1AIfsl7w8Y87bZfzW5pX7Ge+Ed57dK9Q71If1yvH4X+OVvi1Cb01eba9Ij5xJWy/phWdfsgf5XDV4LWeDPOdSrKlsHXvuE9d78NYqcCzNydcltTYaL/+mj8Kr+Vj6VqxKfX8WfQE6Fgja
   </data>
  </layer>
  <objectgroup name="events" width="60" height="20">
@@ -40,9 +40,65 @@
     <property name="event" value="sign_lookforyou"/>
    </properties>
   </object>
+  <object name="bridge_open" type="trap" x="1360" y="400" width="40" height="40">
+   <properties>
+    <property name="kill" value="close"/>
+    <property name="object" value="block"/>
+    <property name="target" value="bridge"/>
+    <property name="trigger" value="open"/>
+   </properties>
+  </object>
+  <object name="gap1_Player" type="trap" x="1000" y="680" width="160" height="120">
+   <properties>
+    <property name="object" value="me"/>
+    <property name="target" value="spawn1_Player"/>
+    <property name="trigger" value="spawn"/>
+   </properties>
+  </object>
+  <object name="gap1_Block" type="trap" x="1000" y="680" width="160" height="120">
+   <properties>
+    <property name="object" value="block"/>
+    <property name="target" value="spawn_Block"/>
+    <property name="trigger" value="spawn"/>
+   </properties>
+  </object>
+  <object name="gap2_Block" type="trap" x="1440" y="680" width="360" height="120">
+   <properties>
+    <property name="object" value="block"/>
+    <property name="target" value="spawn_Block"/>
+    <property name="trigger" value="spawn"/>
+   </properties>
+  </object>
+  <object name="gap2_Player" type="trap" x="1440" y="680" width="360" height="120">
+   <properties>
+    <property name="object" value="me"/>
+    <property name="target" value="spawn2_Player"/>
+    <property name="trigger" value="spawn"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="actors" width="60" height="20">
-  <object name="block" type="block" x="1339" y="413" width="24" height="24"/>
+  <object name="block" type="block" x="1440" y="400" width="24" height="24"/>
   <object name="me" type="player" x="329" y="496" width="20" height="20"/>
+  <object name="bridge" type="bridge" x="1520" y="440" width="160" height="40">
+   <properties>
+    <property name="" value=""/>
+   </properties>
+  </object>
+  <object name="spawn_Block" type="spawn" x="1440" y="360" width="24" height="24">
+   <properties>
+    <property name="actor" value="block"/>
+   </properties>
+  </object>
+  <object name="spawn1_Player" type="spawn" x="860" y="400" width="26" height="27">
+   <properties>
+    <property name="actor" value="me"/>
+   </properties>
+  </object>
+  <object name="spawn2_Player" type="spawn" x="1223" y="358" width="26" height="27">
+   <properties>
+    <property name="actor" value="me"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

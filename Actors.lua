@@ -199,7 +199,7 @@ Actors = {
 
 		onCollision = function (self, collidable, dx, dy)
 			self.__includes.onCollision(self, collidable, dx, dy)
-			if collidable.isBlock then
+			if collidable.isBlock or collidable.isBridge then
 				self.y = self.y - dy
 			end
 		end;
@@ -228,6 +228,90 @@ Actors = {
 				self.x = self.x - dx
 			end
 		end;
-	}
+	},
+
+	['door'] = class {
+		__includes = Collidable;
+		isDoor = true;
+
+		-- Well it is a hack, but there's nothing wrong in it.
+		isMap = true;
+
+		init = function (self, atl_object, map)
+			self.__includes.init(self, atl_object, map)
+			Game:addDrawable(self, 2)
+		end;
+
+		open = function (self)
+			dbg ('Opening door.')
+			self.map:removeCollidable(self)
+			Game:removeDrawable(self)
+		end;
+
+		close = function (self)
+			dbg ('Closing door.')
+			self.map:addCollidable(self)
+			Game:addDrawable(self, 2)
+		end;
+
+		onDraw = function (self)
+			love.graphics.setColor(Colors.orange)
+			love.graphics.rectangle('fill', self.x - self.width / 2, self.y - self.height / 2,
+				self.width, self.height)
+		end;
+	},
+
+	['bridge'] = class {
+		__includes = Collidable;
+		isDoor = true;
+
+		-- Well it is a hack, but there's nothing wrong in it.
+		isMap = true;
+
+		init = function (self, atl_object, map)
+			self.__includes.init(self, atl_object, map)
+			self.map:removeCollidable(self)
+		end;
+
+		open = function (self)
+			dbg ('Opening bridge.')
+			self.map:addCollidable(self)
+			Game:addDrawable(self, 2)
+		end;
+
+		close = function (self)
+			dbg ('Closing bridge.')
+			self.map:removeCollidable(self)
+			Game:removeDrawable(self)
+		end;
+
+		onDraw = function (self)
+			love.graphics.setColor(Colors.white)
+			love.graphics.rectangle('fill', self.x - self.width / 2, self.y - self.height / 2,
+				self.width, self.height)
+		end;
+	},
+
+	['spawn'] = class {
+		__includes = Actor;
+
+		init = function (self, atl_object, map)
+			self.__includes.init(self, atl_object, map)
+
+			self.actor = atl_object.properties['actor']
+			assert (self.actor)
+		end;
+
+		spawn = function (self)
+			dbg ('Spawning actor %s', self.actor)
+			local actor = self.map.actors[self.actor]
+			assert (actor)
+
+			actor.x = self.x
+			actor.y = self.y
+
+			if actor.v then actor.v = vec(0, 0) end
+		end;
+	},
 }
 
