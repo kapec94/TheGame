@@ -24,7 +24,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ]]--
 
-local sqrt, cos, sin = math.sqrt, math.cos, math.sin
+local sqrt, cos, sin, atan2 = math.sqrt, math.cos, math.sin, math.atan2
 
 local function str(x,y)
 	return "("..tonumber(x)..","..tonumber(y)..")"
@@ -78,6 +78,10 @@ local function len(x,y)
 	return sqrt(x*x + y*y)
 end
 
+local function dist2(x1,y1, x2,y2)
+	return len2(x1-x2, y1-y2)
+end
+
 local function dist(x1,y1, x2,y2)
 	return len(x1-x2, y1-y2)
 end
@@ -116,6 +120,10 @@ local function trim(maxLen, x, y)
 	return x * s, y * s
 end
 
+local function angleTo(x,y, u,v)
+	return atan2(y - (v or 0), x - (u or 0))
+end
+
 -- the module
 return {
 	str = str,
@@ -138,11 +146,13 @@ return {
 	-- misc operations
 	len2          = len2,
 	len           = len,
+	dist2         = dist2,
 	dist          = dist,
 	normalize     = normalize,
 	rotate        = rotate,
 	perpendicular = perpendicular,
 	project       = project,
 	mirror        = mirror,
-	trim          = trim
+	trim          = trim,
+	angleTo       = angleTo,
 }
