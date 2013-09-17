@@ -2,6 +2,7 @@
 
 vec = require "hump.vector"
 class = require "hump.class"
+timer = require "hump.timer"
 
 require "Config"
 
@@ -101,6 +102,11 @@ function love.load()
 
 	Game:registerObject(Game)
 	Game:addInteractive(Game)
+
+	Game.timer = timer.new()
+	Game.timer.onUpdate = Game.timer.update
+	Game:registerObject(Game.timer)
+	Game:addActive(Game.timer)
 
 	GUI.HintButton:init()
 

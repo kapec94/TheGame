@@ -10,16 +10,24 @@ function Camera(player)
 			w = love.graphics.getWidth(),
 			h = love.graphics.getHeight()
 		}
-		local cx, cy = self:pos()
 		local map = Game.map
 		local mw, mh = map.width * map.tileWidth, map.height * map.tileHeight
 
+		local dx, dy = 0, 0
+
 		if x + screen.w / 2 < mw and x - screen.w  / 2 > 0 then
-			self:move(x - cx, 0)
+			dx = x - self.x
 		end
 
 		if y + screen.h / 2 < mh and y - screen.h / 2 > 0 then
-			self:move(0, y - cy)
+			dy = y - self.y
+		end
+
+		if dx ~= 0 or dy ~= 0 then
+			if self.tween_handle then
+				Game.timer:cancel(self.tween_handle)
+			end
+			self.tween_handle = Game.timer:tween(0.2, self, { x = self.x + dx, y = self.y + dy }, 'out-sine')
 		end
 	end
 

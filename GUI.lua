@@ -128,7 +128,8 @@ GUI = {
 				self.font = Fonts.get('Ubuntu-R', 24)
 				self.color = Colors.white
 
-				self.visible = false
+				self.opacity = 1
+
 				self.layer = -1
 
 				Game:registerObject(self)
@@ -138,7 +139,15 @@ GUI = {
 				if not self.visible then
 					Game:addDrawable(self, layer)
 					self.layer = layer
-					self.visible = true
+
+					local x = self.x
+					local op = self.opacity
+					self.x = x - 7
+					self.opacity = 0
+
+					Game.timer:tween(0.5, self, { x = x, opacity = op }, 'linear', function ()
+						Game.timer:tween(20, self, { x = x + 20 }, 'out-sine')
+					end)
 				elseif layer ~= self.layer then
 					self:hide()
 					self:show(layer)
@@ -146,15 +155,18 @@ GUI = {
 			end;
 
 			hide = function (self)
-				self.layer = -1
-				self.visible = false
-				Game:removeDrawable(self)
+				Game.timer:tween(0.5, self, { x = self.x + 7, opacity = 0 }, 'linear', function ()
+					self.layer = -1
+					Game:removeDrawable(self)
+				end)
 			end;
 
 			onDraw = function (self)
 				local font = love.graphics.getFont()
 				love.graphics.setFont(self.font)
-				love.graphics.setColor(self.color)
+
+				local c = self.color
+				love.graphics.setColor(c[1], c[2], c[3], self.opacity * 255)
 
 				love.graphics.push()
 				love.graphics.translate(self.x, self.y)
