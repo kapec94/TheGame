@@ -2,9 +2,7 @@ local Actor = class {
 	isActor = true;
 
 	init = function (self, atl_object, map)
-		dbg ('Loading actor ' .. atl_object.name)
-
-		self.name = atl_object.name
+		self.name = string.format('Actor.%s$%s', atl_object.type, atl_object.name)
 		self.width = atl_object.width
 		self.height = atl_object.height
 		self.x = atl_object.x + self.width / 2
@@ -20,6 +18,7 @@ local Actor = class {
 local Collidable = class {
 	__includes = Actor;
 	isCollidable = true;
+	name = 'Collidable';
 
 	init = function (self, atl_object, map)
 		Actor.init(self, atl_object, map)

@@ -3,10 +3,7 @@ atl.Loader.path = 'res/maps/'
 
 local Event = class {
 	init = function (self, atl_object, map)
-		dbg ('Loading event ' .. atl_object.name)
-
-		Game:registerObject(self)
-		self.name = atl_object.name
+		self.name = string.format('Event.%s$%s', atl_object.type, atl_object.name)
 		self.width = atl_object.width
 		self.height = atl_object.height
 		self.x = atl_object.x + self.width / 2
@@ -19,6 +16,7 @@ local Event = class {
 		assert (self.map)
 		assert (self.object)
 
+		Game:registerObject(self)
 		Game:addActive(self)
 	end;
 
@@ -174,6 +172,7 @@ local Events = {
 Map = class {
 	-- Type assertions for the poor.
 	isMap = true;
+	name = 'Map';
 
 	currentCollidableId = 0;
 	events = {};

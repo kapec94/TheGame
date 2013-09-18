@@ -24,9 +24,13 @@ require "GUI"
 require "Fonts"
 
 Game = {
+	name = 'Game Object';
+
 	registerObject = function (self, object)
+		assert (object.name, 'Objects must have a name!')
+
 		self.obj_count = self.obj_count + 1
-		dbg ('Registering object with id ' .. tostring(self.obj_count))
+		dbg ('Registering %s with id %d', object.name, self.obj_count)
 
 		object.id = self.obj_count
 	end;
@@ -105,6 +109,7 @@ function love.load()
 
 	Game.timer = timer.new()
 	Game.timer.onUpdate = Game.timer.update
+	Game.timer.name = 'timer'
 	Game:registerObject(Game.timer)
 	Game:addActive(Game.timer)
 

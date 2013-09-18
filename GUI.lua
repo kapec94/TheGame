@@ -1,5 +1,7 @@
 GUI = {
 	DebugInfo = {
+		name = 'GUI.DebugInfo';
+
 		info = {
 			{ 'FPS', love.timer.getFPS },
 			{ 'me.v', function () return Game.me.v end },
@@ -35,6 +37,8 @@ GUI = {
 
 	DebugEventRenderer = {
 		Color = { 255, 255, 255, 100 };
+
+		name = 'GUI.DebugEventRenderer';
 
 		init = function (self, map)
 			assert (map)
@@ -73,6 +77,7 @@ GUI = {
 		Margin = 10;
 		FontSize = 40;
 
+		name = 'GUI.HintButton';
 		active = false;
 
 		init = function (self)
@@ -120,6 +125,7 @@ GUI = {
 
 	Message = {
 		Label = class {
+			name = 'GUI.Message.Label';
 			init = function (self)
 				-- Those variables are to set by the user
 				self.message = 'Label'
@@ -178,6 +184,7 @@ GUI = {
 		};
 
 		ModalBox = class {
+			name = 'GUI.Message.ModalBox';
 			init = function (self)
 				Game:registerObject(self)
 				self.message = nil

@@ -2,8 +2,8 @@ local cam = require 'hump.camera'
 
 function Camera(player)
 	local c = cam(player.x, player.y)
-	Game:registerObject(c)
 
+	c.name = 'Camera'
 	c.onUpdate = function (self, dt)
 		local x, y = player.x, player.y
 		local screen = {
@@ -31,6 +31,7 @@ function Camera(player)
 		end
 	end
 
+	Game:registerObject(c)
 	return c
 end
 
