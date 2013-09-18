@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" width="60" height="20" tilewidth="40" tileheight="40">
+<map version="1.0" orientation="orthogonal" width="60" height="20" tilewidth="40" tileheight="40" backgroundcolor="#073642">
  <properties>
   <property name="defaultActor" value="me"/>
  </properties>
- <tileset firstgid="1" name="tileset" tilewidth="40" tileheight="40">
-  <image source="tileset.png" width="320" height="80"/>
+ <tileset firstgid="1" name="Main Tileset" tilewidth="40" tileheight="40">
+  <image source="tileset.png" trans="ff00ff" width="400" height="240"/>
  </tileset>
- <tileset firstgid="17" name="hints" tilewidth="40" tileheight="40">
+ <tileset firstgid="61" name="hints" tilewidth="40" tileheight="40">
   <image source="hints.png" width="200" height="40"/>
  </tileset>
  <layer name="background" width="60" height="20">
   <data encoding="base64" compression="zlib">
-   eJztziEOACAMBMGr6P+/jCUIbBMYMVm7laQAAAC46qO/6830C/C+BXH0BMU=
+   eJzt1NEKABEQheF5EW7t+z8hF6vOhXaLmPB/JUzEIGbAeZL3Bha6Ndeb8gZOE7034GD2n/WUEt51ovRNYqE9dZqRe9Y8dnovege1/Xf+rXj6GL8TfZe1BgCgVwZEBgTV
   </data>
  </layer>
  <layer name="tiles" width="60" height="20">
   <data encoding="base64" compression="zlib">
-   eJztlG0PgyAMhEmYfnBucW///6+OJlxsGiqV4ZTES5rpLHIPJzh36tRxNYS6hpr2NvInEecY6l4wrkX1bs7YKmL129jZXOSdsh1X9PtYLWZM+VK2g7Hfi2pNyNaaVeu8yLY39rfMSsLZXJJvi/sXZ7P1vOK8ndueeVLqJu6t45bGpATWi5t5f2HOeZjiXFR9rI5dw4sUxsjzZu1+5LzImHOvWUs8w3u80o85wIzenO+LUiW8Ke5H/H0yj7m1AIfsl7w8Y87bZfzW5pX7Ge+Ed57dK9Q71If1yvH4X+OVvi1Cb01eba9Ij5xJWy/phWdfsgf5XDV4LWeDPOdSrKlsHXvuE9d78NYqcCzNydcltTYaL/+mj8Kr+Vj6VqxKfX8WfQE6Fgja
+   eJztls1ugzAQhH1JrqkqldKkUqE5UXKLyfs/Whkxq4xcmwIRINGONLLjGO9+XvPj3N/R09oJLKx/3m1LeU+rZbGcjPfY+mXNRBYSeFFXsF5dx71lgResJb31GoPXWK/0lgVeMIL3tnIuSwi8jeuYL63P66Yzu8Bbu44X9cXzam5mrP/GWHhWvtMHGRuTw3PgPll9wfrVumAujzCfJXZsHTBVjIfnY0Z/MD7O2ZhvgR29p03hPphrxvDsIwfsd1gD/Z3aD63dMbhG9do6F+Zc8mhGsPZpn7DV1+JV7Nt+x9rUfpy4ZsW5alXJOZ7rfUoe5UCeXWJMax2z7qtxNxzDObNa2Nn7rW1kTRsLpe8/7+7nux7I6pi7sR0Gssbqa7wWX8cvwm9tQXv3c+8ysoSya3OZb9eO4Z3iMEd7P3n2dfwmfdsXO7vh3IK8PpIr4pUyP5f+UryPtKn/Mhevmc4DN+5fO9Nz84b1m9L2/Re7J1NrjPmencr7DcILLoE=
   </data>
  </layer>
  <objectgroup name="events" width="60" height="20">
-  <object name="sign_lookforyou" type="sign" x="394" y="371" width="164" height="147">
+  <object name="sign_lookforyou" type="sign" x="400" y="320" width="440" height="240">
    <properties>
     <property name="message" value="Poszukuję Ciebie."/>
    </properties>
@@ -35,14 +35,10 @@
     <property name="message" value="Spacja sprawia, że podskakuję. A może to świat spada w dół?"/>
    </properties>
   </object>
-  <object name="remove_lookforyou" type="remove" x="560" y="140" width="47" height="419">
-   <properties>
-    <property name="event" value="sign_lookforyou"/>
-   </properties>
-  </object>
   <object name="bridge_open" type="trap" x="1360" y="400" width="40" height="40">
    <properties>
     <property name="kill" value="close"/>
+    <property name="kill_timeout" value="2"/>
     <property name="object" value="block"/>
     <property name="target" value="bridge"/>
     <property name="trigger" value="open"/>
@@ -62,25 +58,53 @@
     <property name="trigger" value="spawn"/>
    </properties>
   </object>
-  <object name="gap2_Block" type="trap" x="1440" y="680" width="360" height="120">
+  <object name="gap2_Block" type="trap" x="1440" y="680" width="400" height="120">
    <properties>
     <property name="object" value="block"/>
     <property name="target" value="spawn_Block"/>
     <property name="trigger" value="spawn"/>
    </properties>
   </object>
-  <object name="gap2_Player" type="trap" x="1440" y="680" width="360" height="120">
+  <object name="gap2_Player" type="trap" x="1440" y="680" width="400" height="120">
    <properties>
     <property name="object" value="me"/>
     <property name="target" value="spawn2_Player"/>
     <property name="trigger" value="spawn"/>
    </properties>
   </object>
+  <object name="sign_obstacles" type="sign" x="1120" y="160" width="560" height="280">
+   <properties>
+    <property name="message" value="Pokonuję przeszkody."/>
+   </properties>
+  </object>
+  <object name="hint_Block" type="hint" x="1160" y="280" width="320" height="160">
+   <properties>
+    <property name="message" value="Ten czerwony bloczek nadzwyczaj przyciąga moją uwagę."/>
+   </properties>
+  </object>
+  <object name="sign_trying" type="sign" x="1440" y="560" width="400" height="240">
+   <properties>
+    <property name="message" value="...staram się."/>
+   </properties>
+  </object>
+  <object name="sign_obstacles2" type="sign" x="1840" y="160" width="520" height="440">
+   <properties>
+    <property name="message" value="Nawet te, które zdają się niepokonane."/>
+   </properties>
+  </object>
+  <object name="door_open" type="trap" x="1960" y="560" width="40" height="40">
+   <properties>
+    <property name="kill" value="close"/>
+    <property name="object" value="block"/>
+    <property name="target" value="door"/>
+    <property name="trigger" value="open"/>
+   </properties>
+  </object>
  </objectgroup>
  <objectgroup name="actors" width="60" height="20">
   <object name="block" type="block" x="1440" y="400" width="24" height="24"/>
   <object name="me" type="player" x="329" y="496" width="20" height="20"/>
-  <object name="bridge" type="bridge" x="1520" y="440" width="160" height="40">
+  <object name="bridge" type="bridge" x="1520" y="440" width="400" height="40">
    <properties>
     <property name="" value=""/>
    </properties>
@@ -100,5 +124,6 @@
     <property name="actor" value="me"/>
    </properties>
   </object>
+  <object name="door" type="door" x="2160" y="400" width="40" height="80"/>
  </objectgroup>
 </map>
