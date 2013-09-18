@@ -179,4 +179,3 @@ function love.quit()
 	love.event.quit()
 end
 
-love.run()
