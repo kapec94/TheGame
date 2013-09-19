@@ -169,15 +169,32 @@ local Events = {
 	},
 }
 
-Map = class {
-	-- Type assertions for the poor.
+local Tile = class {
 	isMap = true;
-	name = 'Map';
 
+	init = function (self, x, y, atl_obj, map)
+		self.map = map
+		assert (self.map)
+
+		self.width = atl_obj.width
+		self.height = atl_obj.height
+		self.x = x * self.width + self.width / 2
+		self.y = y * self.height + self.height / 2
+		self.atl = atl_obj
+		self.name = string.format('Tile(%d, %d)', x, y)
+	end;
+
+	onCollision = function (self, collidable, dx, dy)
+	end;
+}
+
+Map = class {
 	currentCollidableId = 0;
 	events = {};
 	actors = {};
 	collidables = {};
+
+	tiles = {};
 
 	init = function (self, name)
 		self.name = name
@@ -189,7 +206,9 @@ Map = class {
 		self.tileHeight = self.map.tileHeight
 		self.defaultActor = self.map.properties['defaultActor']
 
-		self.tiles = self.map('tiles')
+		for x, y, tile in self.map('tiles'):iterate() do
+			self.tiles[y * self.width + x] = Tile(x, y, tile, self.map) or nil
+		end
 
 		for i, o in ipairs(self.map('events').objects) do
 			local event = Events[o.type]
@@ -212,7 +231,8 @@ Map = class {
 	end;
 
 	sample = function (self, x, y)
-		return self.tiles(math.floor(x / self.tileWidth), math.floor(y / self.tileHeight))
+		x, y = math.floor(x / self.tileWidth), math.floor(y / self.tileHeight)
+		return self.tiles[y * self.width + x]
 	end;
 
 	removeEvent = function (self, event_name)
@@ -240,13 +260,8 @@ Map = class {
 	hitTest = function (self, x, y)
 		local tile = self:sample(x, y)
 
-		if tile ~= nil then return true, self end
-		if x >= self.width * self.tileWidth or
-			x < 0 or
-			y >= self.height * self.tileHeight or
-			y < 0
-		then
-			return true, self
+		if tile ~= nil then
+			return true, tile
 		end
 		for i, o in pairs(self.collidables) do
 			if self.currentCollidableId ~= o.id then
@@ -256,10 +271,6 @@ Map = class {
 			end
 		end
 		return false
-	end;
-
-	onCollision = function (self, collidable, dx, dy)
-		-- Well, we don't give a shit, as we're the damn world!
 	end;
 
 	onDraw = function (self)

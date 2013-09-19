@@ -33,97 +33,92 @@ local Collidable = class {
 		return x < self.width and x >= 0 and y < self.height and y >= 0
 	end;
 
-	-- wow, now that's obsfucated function, ain't it.
-	-- pos - current object position in given dimention
-	-- dr - moving offset
-	-- collision_fn - boolean function checking if there's a collision going
-	-- object_size - object's size in given dimention
-	-- RETURN VALUE:
-	-- * <bool indicating if there is a collision to resolve>,
-	-- * <new position>,
-	-- * <object we just collided with (in any)>,
-	-- * <how 'far' we're in this object (if any)>
-	resolve_collision = function (self, pos, dr, object_size, collision_fn)
-		local function clamp(val)
-			if math.abs(val) > 1 then
-				return math.abs(val) / val
-			else
-				return val
-			end
-		end
-
-		-- Maximum distance object can go in one iteration, in pixels
-		local step = 40
-
-		local t = 1
-		local s = object_size / 2
-		local round = math.floor
-		dr = dr / step
-		if dr < 0 then
-			dr = math.abs(dr)
-			t = -t
-			s = -s
-			round = math.ceil
-		end
-		while dr ~= 0 do
-			local newpos = pos + clamp(dr) * t * step
-			local collides, obj = collision_fn(newpos + s)
-			if collides then
-				local delta = newpos - pos
-				while collision_fn(pos + delta + s) do
-					delta = delta - clamp(delta)
-				end
-				return true, newpos, obj, newpos - pos - delta
-			else
-				pos = newpos
-				dr = dr - math.abs(t)
-				if dr < 0 then dr = 0 end
-			end
-		end
-		return false, pos, nil, 0
-	end;
-
 	onUpdate = function (self, dt)
+		local function sign(n)
+			return n ~= 0 and math.abs(n) / n or 0
+		end
+
 		local map = self.map
-		local x, y = self.x, self.y
 		local w, h = self.width, self.height
 
 		self.map:setCurrentCollidable(self)
 
-		-- Gravity first of all.
-		if not map:hitTest(x - w / 2 + 1, y + h / 2) and not map:hitTest(x + w / 2 - 1, y + h / 2) then
+		if not map:hitTest(self.x - w / 2 + 1, self.y + h / 2) and not map:hitTest(self.x + w / 2 - 1, self.y + h / 2) then
 			self.v = self.v + Config.Gravity * dt
 			self.falling = true
 		end
 
-		local hitTestX = function (x)
-			local collision, obj = map:hitTest(x, y - h / 2 + 1)
-			if collision then return true, obj end
+		-- Collision detection
+		local dx, dy = vec.unpack(self.v * dt)
+		local collision, obj
+		local obj_x, obj_y
 
-			collision, obj = map:hitTest(x, y + h / 2 - 1)
-			if collision then return true, obj end
+		local x, y = self.x + dx, self.y + dy
+
+		if dx ~= 0 then
+			local dir = sign(dx)
+			local pos = x + dir * w / 2
+			local objs = {}
+
+			dx = 0
+
+			collision, obj = map:hitTest(pos, self.y - h / 2 + 1)
+			if collision then
+				table.insert(objs, obj)
+			end
+
+			collision, obj = map:hitTest(pos, self.y + h / 2 - 1)
+			if collision then table.insert(objs, obj) end
+
+			for i, obj in ipairs(objs) do
+				local cpos = obj.x - dir * obj.width / 2
+
+				local new_dx = pos - cpos
+				if math.abs(new_dx) > math.abs(dx) then
+					dx = new_dx
+					obj_x = obj
+				end
+			end
 		end
-		local hitTestY = function (y)
-			local collision, obj = map:hitTest(x - w / 2 + 1, y)
-			if collision then return true, obj end
 
-			collision, obj = map:hitTest(x + w / 2 - 1, y)
-			if collision then return true, obj end
+		if dy ~= 0 then
+			local dir = sign(dy)
+			local pos = y + dir * h / 2
+			local objs = {}
+
+			dy = 0
+
+			collision, obj = map:hitTest(self.x - w / 2 + 1, pos)
+			if collision then
+				table.insert(objs, obj)
+			end
+
+			collision, obj = map:hitTest(self.x + w / 2 - 1, pos)
+			if collision then
+				table.insert(objs, obj)
+			end
+
+			for i, obj in ipairs(objs) do
+				local cpos = obj.y - dir * obj.height / 2
+				local new_dy = pos - cpos
+				if math.abs(new_dy) > math.abs(dy) then
+					dy = new_dy
+					obj_y = obj
+				end
+			end
 		end
-
-		local x_collision, x, obj_x, dx = self:resolve_collision(x, self.v.x * dt, w, hitTestX)
-		local y_collision, y, obj_y, dy = self:resolve_collision(y, self.v.y * dt, h, hitTestY)
 
 		self.x = x
 		self.y = y
 
-		if x_collision then
-			obj_x:onCollision(self, -dx, 0)
+		if dx ~= 0 then
 			self:onCollision(obj_x, dx, 0)
+			obj_x:onCollision(self, -dx, 0)
 		end
-		if y_collision then
-			obj_y:onCollision(self, 0, -dy)
+
+		if dy ~= 0 then
 			self:onCollision(obj_y, 0, dy)
+			obj_y:onCollision(self, 0, -dy)
 		end
 	end;
 
@@ -198,7 +193,7 @@ Actors = {
 
 		onCollision = function (self, collidable, dx, dy)
 			self.__includes.onCollision(self, collidable, dx, dy)
-			if collidable.isBlock or collidable.isBridge then
+			if collidable.isBlock then
 				self.y = self.y - dy
 			end
 		end;
