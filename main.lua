@@ -119,6 +119,8 @@ function love.load()
 	Game.me = Game.map.actors['me']
 	assert (Game.me)
 
+	love.graphics.setBackgroundColor(Game.map.backgroundColor)
+
 	local camera = Camera(Game.me)
 	Game:addActive(camera)
 	Game.camera = camera

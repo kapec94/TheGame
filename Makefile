@@ -2,9 +2,11 @@ ZIP=zip -r
 RM=rm -rf
 
 GAME=game.love
+SOURCE=*.lua hump atl res
+EXCLUDE = *.git*
 
-game.love: *.lua
-	$(ZIP) $(GAME) *.lua hump atl res
+game.love:
+	$(ZIP) $@ $(SOURCE) -x $(EXCLUDE)
 
 all: game.love
 

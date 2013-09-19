@@ -205,6 +205,7 @@ Map = class {
 		self.tileWidth = self.map.tileWidth
 		self.tileHeight = self.map.tileHeight
 		self.defaultActor = self.map.properties['defaultActor']
+		self.backgroundColor = self.map.backgroundColor
 
 		for x, y, tile in self.map('tiles'):iterate() do
 			self.tiles[y * self.width + x] = Tile(x, y, tile, self.map) or nil
