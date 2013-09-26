@@ -16,6 +16,11 @@ local Event = class {
 		assert (self.map)
 		assert (self.object)
 
+		if self.object == '*' then
+			self.actors_inside = 0
+			self.actors = {}
+		end
+
 		Game:registerObject(self)
 		Game:addActive(self)
 	end;
@@ -33,21 +38,41 @@ local Event = class {
 				r2[2] + r2[4] < r1[2])
 		end
 
-		local obj = self.map.actors[self.object]
-		assert (obj)
+		local function rect(obj)
+			return {
+				obj.x - obj.width / 2, obj.y - obj.height / 2,
+				obj.width, obj.height }
+		end
 
-		local obj_rect = {
-			obj.x - obj.width / 2, obj.y - obj.height / 2,
-			obj.width, obj.height
-		}
-		local self_rect = {
-			self.x - self.width / 2, self.y - self.height / 2,
-			self.width, self.height
-		}
-		if rects_intersect(obj_rect, self_rect) then
-			self:trigger()
+		local self_rect = rect(self)
+		if self.object == '*' then
+			for name, actor in pairs(self.map.actors) do
+				if rects_intersect(self_rect, rect(actor)) then
+					if self.actors[name] == nil then
+						self.actors_inside = self.actors_inside + 1
+						self.actors[name] = true
+					end
+				else
+					if self.actors[name] == true then
+						self.actors_inside = self.actors_inside - 1
+						self.actors[name] = nil
+					end
+				end
+			end
+			if self.actors_inside > 0 then
+				self:trigger()
+			else
+				self:kill()
+			end
 		else
-			self:kill()
+			local obj = self.map.actors[self.object]
+			assert (obj)
+
+			if rects_intersect(rect(obj), self_rect) then
+				self:trigger()
+			else
+				self:kill()
+			end
 		end
 	end;
 

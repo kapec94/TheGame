@@ -39,7 +39,7 @@
    <properties>
     <property name="kill" value="close"/>
     <property name="kill_timeout" value="2"/>
-    <property name="object" value="block"/>
+    <property name="object" value="*"/>
     <property name="target" value="bridge"/>
     <property name="trigger" value="open"/>
    </properties>
